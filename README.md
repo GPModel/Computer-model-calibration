@@ -7,7 +7,7 @@ Matlab R2020b, Matlab Global Optimization Toolbox, Matlab Statistics and Machine
 
 Step: Run MainExample1.m to replicates the simulations and shows results for Example 1
 
-%%%%%%%%%%%%%%%%%%%%% Steps for replicating results for EnergyPlus Example %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% Steps for replicating results for Example 2 (EnergyPlus Example) %%%%%%%%%%%%%%%%%%%%%
 
 Step 1: Install the EnergyPlus 9.4.0  on the folder C:\EnergyPlusV9-4-0
 
