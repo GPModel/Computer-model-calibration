@@ -291,7 +291,6 @@ clc
 load Example1.mat
 ZNBC_BC=1;   ZNBC_ID=0;   ZNBC_SR=2;  
 ZMLFSSE=1;   ZLFSSE=0;   
-ZRespSRGP=1;     ZRespLR=0;
 for Group=1:1:10
     idx0=(Group-1)*10+[1:10]
     parfor id=idx0
@@ -303,9 +302,7 @@ for Group=1:1:10
         [T_SR_AGP{id,1}] =CalibrationAGP(MultiDataInput(id),ZNBC_SR,ZLFSSE); 'SR-AGP'
         [T_Nested{id,1}] =CalibrationNested(MultiDataInput(id)); 'Nested'
         [T_BC_GP{id,1}] =CalibrationBCGP(SingleDataInput(id)); 'BC-GP'
-        [T_SR_GP{id,1}] =CalibrationSRGP_LR(SingleDataInput(id),ZRespSRGP); 'SR-GP'
-        [T_LR{id,1}] =CalibrationSRGP_LR(SingleDataInput(id),ZRespLR); 'LR'
-        
+        [T_SR_GP{id,1}] =CalibrationSRGP(SingleDataInput(id)); 'SR-GP'        
         
     end
     save(['Example1Results.mat'])
@@ -318,13 +315,12 @@ clc
 load Example1.mat
 load Example1Results.mat
 
-BORecordTable=[  T_MBC_AGP T_BC_AGP   T_ID_AGP T_SR_AGP T_Nested T_BC_GP T_SR_GP   T_LR];
-Labels={'MBC-AGP  ','  BC-AGP ','  ID-AGP ', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP' ,'LR'  }';
+BORecordTable=[  T_MBC_AGP T_BC_AGP   T_ID_AGP T_SR_AGP T_Nested T_BC_GP T_SR_GP  ];
 FontSize=25;
 
 size(BORecordTable,1)
 for Trainidx=1:size(BORecordTable,1)
-    for Methodidx=1:8
+    for Methodidx=1:7
         Table=BORecordTable{Trainidx,Methodidx} ;
         
         SSETrue_XhatsEnd(Trainidx,Methodidx)=Table.SSETrue_Xhats(end,:);
@@ -364,26 +360,27 @@ meanTrueSSE_Xhats_Budget=mean(TrueSSE_Xhats_Budget,3);
 meanL2_Budget=mean(L2_Budget,3);
 
 idx1=1;
-for idx2=1:8
+for idx2=1:7
     signRank_p(idx2,1)=signrank(SSETrue_XhatsEnd(:,idx1),SSETrue_XhatsEnd(:,idx2));
     [ ~, ttest_p(idx2,1)]=ttest(SSETrue_XhatsEnd(:,idx1),SSETrue_XhatsEnd(:,idx2));
 end
-Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs ID-AGP ', ' (i) vs SR-AGP' , ' (i) vs Nested' ,' (i) vs BC-GP',' (i) vs SR-GP' ,' (i) vs LR'  }';
+Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs ID-AGP ', ' (i) vs SR-AGP' , ' (i) vs Nested' ,' (i) vs BC-GP',' (i) vs SR-GP' }';
 
 TableSh =table(Labels1,signRank_p,ttest_p)
 
-for idx2=1:8
+for idx2=1:7
     signRank_p(idx2,1)=signrank(L2End(:,idx1),L2End(:,idx2));
     [ ~, ttest_p(idx2,1)]=ttest(L2End(:,idx1),L2End(:,idx2));
 end
 TableL2 =table(Labels1,signRank_p,ttest_p)
 
-
+%%
 figure(3),clf%in the Paper
+Labels={'MBC-AGP     ','  BC-AGP ','  ID-AGP ', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
 subplot(121)
 boxplot( SSETrue_XhatsEnd,'Labels',Labels)
 bp= gca;bp.FontSize=20;
-bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=19;
+bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=22;
 bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
 set(gca,'YScale','log')
 ylabel('$S_h(\hat{\textbf{x}}^*_{\mathbf{ML}})$','FontWeight','bold','Interpreter','latex','FontSize',28);
@@ -399,7 +396,7 @@ boxplot( L2End,'Labels',Labels)
 set(gca,'Position',[0.555 0.12 0.435 0.8])
 set(findobj(gca,'type','line'),'linew',2)
 bp= gca;bp.FontSize=20;
-bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=19;
+bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=22;
 bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
 ylabel('$L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex','FontSize',28);
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 2);
@@ -407,8 +404,10 @@ title('(b)','FontSize',25)
 set(gcf,'position'  ,[          35         386        1920         530])
 set(gca,'yGrid','on','GridLineStyle','--')
 bp.GridLineStyle='--';
+yticks(0:0.05:3)
 
 
+%%
 figure(4),clf%in the Paper
 tiledlayout(1,2,'Padding','none','TileSpacing','none');
 nexttile
@@ -422,7 +421,6 @@ plot(1:Budget,meanTrueSSE_Xhats_Budget(1:Budget,4),'k:d','linewidth',linewidth,'
 plot(1:Budget+1,meanTrueSSE_Xhats_Budget(1:Budget+1,5),'k:s','linewidth',linewidth,'MarkerFaceColor','k','MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:4:Budget+1 ])
 plot(1:Budget,meanTrueSSE_Xhats_Budget(1:Budget,6),'k-','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[(InitialBudget):4:Budget Budget])
 plot(1:Budget,meanTrueSSE_Xhats_Budget(1:Budget,7),'--s','color',[0.4660 0.6740 0.1880],'linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget+3):4:Budget ]),hold on
-plot(1:Budget,meanTrueSSE_Xhats_Budget(1:Budget,8),'r^--','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:3:Budget Budget])
 set(gca,'FontWeight','bold','FontSize',FontSize,'YScale','log')
 xlim([InitialBudget,Budget+1])
 xlabel('Computational cost','FontWeight','normal')
@@ -434,7 +432,7 @@ leg = legend(Labels,'NumColumns',4,'Location','northeast');
 leg.ItemTokenSize = [54,50];
 title('(a)')
 ylim([1.6 10e3])
-
+% xticks([30:3:45])
 nexttile
 plot(1:Budget,meanL2_Budget(1:Budget,1),'k-o','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:3:Budget Budget]),hold on
 plot(1:Budget,meanL2_Budget(1:Budget,2),'b--o','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerFaceColor','b','MarkerIndices',[InitialBudget (InitialBudget+3):3:Budget Budget]),
@@ -443,7 +441,6 @@ plot(1:Budget,meanL2_Budget(1:Budget,4),'kd:','linewidth',linewidth,'MarkerSize'
 plot(1:Budget+1,meanL2_Budget(1:Budget+1,5),'k:s','linewidth',linewidth,'MarkerFaceColor','k','MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:4:Budget+1])
 plot(1:Budget,meanL2_Budget(1:Budget,6),'k-','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[(InitialBudget):4:Budget Budget])
 plot(1:Budget,meanL2_Budget(1:Budget,7),'--s','color',[0.4660 0.6740 0.1880],'linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget+3):4:Budget ]),hold on
-plot(1:Budget,meanL2_Budget(1:Budget,8),'r^--','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:3:Budget Budget])
 xlim([InitialBudget,Budget+1])
 xlabel('Computational cost','FontWeight','normal')
 title('(b)')
@@ -453,14 +450,12 @@ leg = legend(Labels,'NumColumns',4,'Location','northeast');
 leg.ItemTokenSize = [54,50];
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 2);
 set(gcf,'Position',[          0         0        1920         650])
-ylim([0 0.35])
+ylim([0 0.26])
 
-
-
-
+%%
 figure(5),clf%in the Paper
-Labels2Method={'MBC-AGP','BC-AGP'};boxplot( phiEnd(:,[1 2] ), 'Labels',Labels2Method) 
-% Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};boxplot( phiEnd(:,[1 2 6]), 'Labels',Labels2Method)
+% Labels2Method={'MBC-AGP','BC-AGP'};boxplot( phiEnd(:,[1 2] ), 'Labels',Labels2Method) 
+Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};boxplot( phiEnd(:,[1 2 6]), 'Labels',Labels2Method)
 % hold on,% yline(0.5)
 set(findobj(gca,'type','line'),'linew',2)
 set(findobj(gcf,'type','axes'),'FontSize',35,'FontWeight','Bold', 'LineWidth', 2);
@@ -468,6 +463,7 @@ ylabel('$ \hat \varphi$','Interpreter','latex','FontSize',50,'Rotation',0,'Horiz
 set(gca,'Position',[    0.2    0.1571    0.78    0.78])
 set(gcf,'Position',[           409   559   900   410])%420
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 4);
+set(gca,'yGrid','on','GridLineStyle','--')
 
 %%
 %Figures in Appendix A %in the Paper
@@ -519,7 +515,7 @@ for Methodidx =1:5
 %     axis square
 end
 
-for Methodidx =6:8
+for Methodidx =6:7
     
     Table=BORecordTable{Trainidx,Methodidx};
     XhatsEnd=Table.Xhats(end,:);
@@ -557,150 +553,8 @@ for Methodidx =6:8
 end
 set(findobj(gcf,'type','axes'),'FontSize',21,'FontWeight','Bold', 'LineWidth', 2);
 % set(gcf,'Position',[          0         0        1800         900])
+% %%
 set(gcf,'Position',[          0         0        1600         700])
 
 % % copygraphics(gcf)
 
-%%
-
-% %%%%%% %Condition numbers, correlation paraemeter for space, time , and gamma           for the unrestricted model of the LR method
-AllConditionNumber= [ ];
-for id=1:200
-    Table=T_LR{id};
-    Alltheta_space(id,:)=  [  Table.BestTables(:,1) ];
-    Alltheta_time(id,:)=  [  Table.BestTables(:,2) ];
-    Allgamma(id,:)=  [  Table.BestTables(:,3) ];
-    AllConditionNumber(id,:)=  [  Table.BestTables(:,4) ]; 
-end
-
-
-figure(101),clf
-subplot(221)
-Alltheta_space=sort(Alltheta_space(:));
-histogram(Alltheta_space(1:2900))
-title('correaltion parameter for space, example 1')
-
-subplot(222)
-Alltheta_time=sort(Alltheta_time(:));
-histogram(Alltheta_time(1:2900))
-title('correaltion parameter for time')
-
-subplot(223)
-Allgamma=sort(Allgamma(:));
-histogram(Allgamma(1:2900))
-title(' gamma')
-
-
-subplot(224)
-AllConditionNumber=sort(AllConditionNumber(:));
-histogram(AllConditionNumber(1:2900))
-title('condition number')
-
-%%%%%%%%%%%%%%%%%%%Check interpolation at the design points for the unrestricted model in LR method..
-ThisDesign=1
-ThisObs=3
-
-Table=T_LR{ThisDesign};
-Delta=[SingleDataInput(ThisDesign).Yh(ThisObs,:)-PhysData]';%GP
-Theta0s=Table.BestTables(ThisObs,1:2);
-gamma=Table.BestTables(ThisObs,3);
-
-
-Space=[ 1, 1.5, 2, 2.5 , 3]/3;NSpace=numel(Space);
-dist=abs(Space-Space');
-Rs=exp(-Theta0s(1)*dist.^1.99);
-[Vs,DiagDs]=svd(Rs);%R1 5*5  %'vector' econ
-
-Time=[0.3:0.3:60]';Ntime=numel(Time);
-Rt=ComputeRMatrix0(Time,Time,Theta0s(2))+10^-6*speye(numel(Time));
-[Vt,DiagDt]=svd(Rt);%R2
-
-N=NSpace*Ntime;
-invRs=invandlogdet(Rs);
-invRt=invandlogdet(Rt);
-V=gamma*kron(Rs,Rt)+eye(N);
-[invV,logdetV,condV]=invandlogdet(V);
-F = ones(N,1);
-FTinvV=F'*invV;
-inv1 = 1./(FTinvV*F) ;
-Mu00 = inv1*(FTinvV*Delta);
-Res = Delta-F*Mu00 ;
-Sigma00=Res'*invV*Res/ (N );  
-LogLikelihood00=-1/2*(logdetV +N*log(Sigma00) );
-fval00=-LogLikelihood00;
-
-
-V1=gamma*kron(Rs,Rt);
-ZPred=Mu00+V1*invV*(Delta-Mu00);
-ZCov=max(diag(Sigma00*(V1-V1*invV*V1)),0);
-ZLCL = ZPred+norminv(0.025)*ZCov.^0.5;
-ZUCL= ZPred+norminv(1-0.025)*ZCov.^0.5;
-
-
-Delta1=reshape(Delta,200,5)';
-ZPred1=reshape(ZPred,200,5)';
-ZLCL1=reshape(ZLCL,200,5)';
-ZUCL1=reshape(ZUCL,200,5)';
-t=[0.3:0.3:60];
-s= [1, 1.5, 2, 2.5 3];
-[tgrid,sgrid]=meshgrid(t,s);
-
-
-figure(102),clf
-subplot(221)
-mesh(tgrid,sgrid,Delta1)
-hold on
-plot3(tgrid(:),sgrid(:),ZPred1(:),'bo');
-plot3(tgrid(:),sgrid(:),ZLCL1(:),'k+');
-plot3(tgrid(:),sgrid(:),ZUCL1(:),'rx');
-legend('data:delta','posterior mean', 'LCL','UCL','Location', 'best')
-set(findobj(gcf,'type','axes'),'FontSize',21,'FontWeight','Bold', 'LineWidth', 2);
-
-subplot(222)
-Temp = SingleDataInput(ThisDesign).Yh(ThisObs,:) + Delta';
-Temp1=reshape(Temp,200,5)';
-mesh(tgrid,sgrid,Temp1)
-hold on
-title('Yh+delta')
-set(findobj(gcf,'type','axes'),'FontSize',21,'FontWeight','Bold', 'LineWidth', 2);
-
-subplot(223)
-Yh = SingleDataInput(ThisDesign).Yh(ThisObs,:);
-Yh1=reshape(Yh,200,5)';
-mesh(tgrid,sgrid,Yh1)
-title('Yh')
-set(findobj(gcf,'type','axes'),'FontSize',21,'FontWeight','Bold', 'LineWidth', 2);
-
-subplot(224)
-PhysData1=reshape(PhysData,200,5)';
-mesh(tgrid,sgrid,PhysData1)
-hold on
-max(PhysData(:))
-min(PhysData(:))
-title('PhysData')
-set(findobj(gcf,'type','axes'),'FontSize',21,'FontWeight','Bold', 'LineWidth', 2);
-
-
-
-figure(103),clf
-plot(Yh1(:),Temp1(:),'+')
-xlabel('yh')
-ylabel('yh+delta')
-hold on
-plot(Yh1(:),Yh1(:),'-')
-set(findobj(gcf,'type','axes'),'FontSize',21,'FontWeight','Bold', 'LineWidth', 2);
-
-
-function R=ComputeRMatrix0(Xs,Ys,Theta0s)
-[nX,Dim]=size(Xs);
-[nY,~]=size(Ys);
-
-R=ones(nX,nY);
-for id=1:Dim
-    x=Xs(:,id);
-    y=Ys(:,id)';
-    Theta0=Theta0s(id);
-    d=abs(x-y);
-    R=R.* [exp( -Theta0.*d.^1.99) ] ;% Gaussian correlation function
-end
-end

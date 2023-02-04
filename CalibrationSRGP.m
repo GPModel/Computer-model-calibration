@@ -1,15 +1,15 @@
-function [RecordTable,RecordData]=CalibrationBCGP(DataInput)
+function [RecordTable,RecordData]=CalibrationSRGP(DataInput)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Single fidelity calibration method : BC-GP
-%           Resph: is a vector of HF SSE,
+% Single fidelity calibration method : SR-GP
+%           Resph: is a vector of HF response modeled as a GP
 %           Xhats: is MLE of the calibration parameter vector at all iterations
 %           Resphminhats: is posterior means/medians of the Resph at Xhats at all iterations
 %           SSETrue_Xhats: is the true values of SSE evaluated at Xhats at all iterations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-%%%%%%%Computes the untransformed HF response
+% Referennces:
+% Ranjan, P., Thomas, M., Teismann, H., & Mukhoti, S. (2016). Inverse problem for a time-series valued computer simulator via scalarization. 
+% Open Journal of Statistics, 6(3), 528-544.
+%%%%%%%Computes the HF response
 Dh=DataInput.Dh;
 Yh=DataInput.Yh;
 XTrue=DataInput.XTrue;
@@ -19,9 +19,9 @@ Budget=DataInput.Budget;
 Case=DataInput.Case;
 [n,Dim]=size(Dh);
 Level=2*ones(n,1) ;
-ZNBC=1;%Box-Cox transformation
 
-Resph=sum((Yh-PhysData).^2,2);
+
+Resph=(mean((Yh-PhysData).^2,2)).^0.5;  %Root MSE modeled as a GP in Ranjan et al. (2016)
 Budget =Budget-(n*RatioCost);
 
 if Dim==2
@@ -39,39 +39,39 @@ options=optimoptions('patternsearch','disp','off');
 while (1)
     
     %%%%%%%Fits the GP model and finds the minimum posterior mean
-    [Mu,Sigma,Theta,invR,invRRes,condR,Objfval,phis(n,:)]=GPFit(Dh,Resph,ZNBC);
+    [Mu,Sigma,Theta,invR,invRRes,condR,Objfval]=GPFit(Dh,Resph);
     
-    ObjQuantile=@(x) Fun_ZhQuantile(x,Dh,Resph,Theta,Mu,Sigma,invR,invRRes);
-    fvalsObjQuantile= ObjQuantile(AFPoints);
-    [~,Sortidx]=sort(fvalsObjQuantile);
+    ObjResphPreds=@(x) Fun_GPPrediction(x,Dh,Resph,Theta,Mu,Sigma,invR,invRRes);
+    fvalsObjResphPreds= ObjResphPreds(AFPoints);
+    [~,Sortidx]=sort(fvalsObjResphPreds);
     parfor id=1:10
-        [XBestTry(id,:),fBestTry(id,1)]= patternsearch(ObjQuantile,AFPoints(Sortidx(id),:),[],[],[],[],lb,ub,[],options);
+        [XBestTry(id,:),fBestTry(id,1)]= patternsearch(ObjResphPreds,AFPoints(Sortidx(id),:),[],[],[],[],lb,ub,[],options);
     end
-    [minObjZhPreds,minidx]=min(fBestTry);
-    Xhat_new=XBestTry(minidx,:) ;
+    [Resphminhats(n,:),minidx]=min(fBestTry);
+    
     
     %%%%%%%Stores GP model parameters and the MLE of the calibration parameter vector
-    Sigmas(n,:)=Sigma;    Thetas(n,:)=Theta;    Mus(n,:)=Mu;    condRs(n,:)=condR;
+    Sigmas(n,:)=Sigma;    Thetas(n,:)=Theta;    Mus(n,:)=Mu;condRs(n,:)=condR;
     
-    
-    Xhats(n,:)=Xhat_new;
-    Resphminhats(n,:)= TransformData_inv(minObjZhPreds,phis(n,:),ZNBC);
-    minZDataRef=Fun_PredictionZ(Xhat_new,Dh,Resph,Theta,Mu,Sigma,invR,invRRes);
-    
-    %%%Evaluate the true SSE at the MLE of the calibration parameter vector
-    Yh_Xhats(n,:)=Simulator(Xhat_new,2,Case);
+    %%%Evaluate the true SSE at the MLE of the calibration parameter vector    
+    Xhats(n,:)=XBestTry(minidx,:) ;
+    Yh_Xhats(n,:)=Simulator(Xhats(n,:),2,Case);
     SSETrue_Xhats(n,:)=sum( (Yh_Xhats(n,:)-PhysData).^2);
     
-    if Case==2
-        disp(['Xhat_new and SSETrue_Xhats at  ' num2str(n) ' -iter '  num2str(Xhats(n,:))  '    ' num2str(SSETrue_Xhats(n,:))  ])
-    end
     
+        if Case==2
+        disp(['Xhat_new and SSETrue_Xhats at  ' num2str(n) ' -iter '  num2str(Xhats(n,:))  '    ' num2str(SSETrue_Xhats(n,:))  ])
+        end
+    
+        
     if Budget<RatioCost% RatioCost=c_h
         break
     end
     
-    %%%%%%%Adds a follow-up design point by Maximizing the AF
-    MinusEIObj=@(TeD) Fun_MinusEI(TeD,Dh,Resph,Theta,Mu,Sigma,invR,invRRes,minZDataRef) ;
+    MinResphRefEI=Resphminhats(n,:);
+    
+    %%%%%%%Maximizes the EI AF and adds a follow-up design point
+    MinusEIObj=@(TeD) Fun_MinusEI(TeD,Dh,Resph,Theta,Mu,Sigma,invR,invRRes,MinResphRefEI);
     fvals=MinusEIObj(AFPoints);
     [~,Sortidx]=sort(fvals);
     clear XBestTry fBestTry
@@ -81,13 +81,13 @@ while (1)
     [fBest,minidx]=min(fBestTry);
     NextPoint=XBestTry(minidx,:) ;
     
-    disp(['Current budget=' num2str(Budget) '. The ' num2str(n+1) '-th run will be at point ' num2str(NextPoint,' %1.3f ')     ])
+    disp(['Current budget=' num2str(Budget) '. The ' num2str(n+1) '-th run will be at point ' num2str(NextPoint,' %1.3f ')   ])
     n=n+1;
     Dh(n,:)=NextPoint;
     Yh(n,:)=Simulator(NextPoint,2,Case);
     Level(n,:)=2;
     
-    Resph(n,:)=sum((Yh(n,:)-PhysData).^2);
+    Resph(n,:)=(mean(  (Yh(n,:)-PhysData).^2))^0.5;
     
     Budget=Budget-RatioCost ;
 end
@@ -109,15 +109,15 @@ RecordData.ZNBC=[];
 RecordData.Yh_Xhats=Yh_Xhats;
 
 %%%%%%%Stores GP model parameters and the MLE of the calibration parameter vector at all iterations with a table
-RecordTable=table(D,Level,Resplh,Sigmas,phis,Thetas,Mus,Xhats,Resphminhats,SSETrue_Xhats,condRs);
+RecordTable=table(D,Level,Resplh,Sigmas,Thetas,Mus,Xhats,Resphminhats,SSETrue_Xhats,condRs);
 end
 %%
-function [Mu,Sigma,Theta,invR,invRRes,condR,Objfval,phi]=GPFit(Dh,Resph,ZNBC)
+function [Mu,Sigma,Theta,invR,invRRes,condR,Objfval]=GPFit(Dh,Resph)
 [n,Dim]=size(Dh);
 
-lb=[ (0.1)*ones(1,Dim) -2];
-ub=[ (20)*ones(1,Dim) 2];
-ObjS=@(Par) Fun_NegLogLikelihood(Dh,Resph,Par(1:Dim),Par(Dim+1),n,ZNBC);
+lb=[ (0.1)*ones(1,Dim) ];
+ub=[ (20)*ones(1,Dim) ];
+ObjS=@(Par) Fun_NegLogLikelihood(Dh,Resph,Par,n);
 nvar=numel(ub);
 
 Sobolset=sobolset(nvar,'Skip',1e3,'Leap',1e2);
@@ -136,49 +136,44 @@ end
 
 [fBest,minidx]=min(fBestTry);
 Parin=XBestTry(minidx,:) ;
-[Objfval,Mu,Sigma,Theta,invR,invRRes,condR,phi]=ObjS(Parin);
+[Objfval,Mu,Sigma,Theta,invR,invRRes,condR]=ObjS(Parin);
 end
 %%
-function [fval,Mu,Sigma,Theta,invR,invRRes,condR,phi]=Fun_NegLogLikelihood(D,Resph,Theta,phi,n,ZNBC)
+function [fval,Mu,Sigma,Theta,invR,invRRes,condR]=Fun_NegLogLikelihood(D,Resph,Theta,n)
 
-[ZData,SumLogdZ]=TransformData(Resph,phi,ZNBC);
 FT=ones(1,n) ;
 R=ComputeRmatrix2(D,Theta);
 [invR,logdetR,condR]=invandlogdet(R);
 FTinvR=FT*invR;
-Mu=(FTinvR*ZData)/sum(invR,'all');
+% inv1=invandlogdet(FTinvR*F);
+Mu=(FTinvR*Resph)/sum(invR,'all');
 
-Res=ZData-Mu ;
+Res=Resph-Mu ;
 invRRes=invR*Res;
 Sigma=Res'*invRRes/ (n ) ;
-fval=n*log(Sigma)+logdetR-2*SumLogdZ;
+fval=n*log(Sigma)+logdetR;
 
-if any(isnan(invR),'all') || any(isinf(invR),'all') || Sigma==0%
-    fval=Inf;Mu=[];Sigma=[];Theta=[];invR=[];invRRes=[];condR=[];phi=[];
+if any(isnan(invR),'all') || any(isinf(invR),'all') || Sigma==0
+    fval=Inf;Mu=[];Sigma=[];Theta=[];invR=[];invRRes=[];condR=[];
     return
 end
 end
 %%
-function [Fval_ZQuantile]=Fun_ZhQuantile(TeD,Dh,Resph,Theta,Mu,Sigma,invR,invRRes)
-[ZPreds,ZCovs]=Fun_PredictionZ(TeD,Dh,Resph,Theta,Mu,Sigma,invR,invRRes);
-Fval_ZQuantile=ZPreds+norminv(0.9)*ZCovs.^0.5;
-end
-%%
-function [ZPreds,ZCovs]=Fun_PredictionZ(TeD,Dh,Resph,Theta,Mu,Sigma,invR,invRRes)
+function [RespPreds,RespCovs]=Fun_GPPrediction(TeD,Dh,Resph,Theta,Mu,Sigma,invR,invRRes)
 nugget=1e-6;
 rT=ComputeRmatrix(TeD,Dh,Theta);
 rT_invR=rT*invR;
-ZPreds=Mu + rT*invRRes;
-ZCovs =Sigma * ( 1+nugget - sum(rT_invR.*rT,2) ) ;
-ZCovs=max(ZCovs,0);
+RespPreds=Mu + rT*invRRes;
+RespCovs =Sigma * ( 1+nugget - sum(rT_invR.*rT,2) ) ;
+RespCovs=max(RespCovs,0);
 end
 %%
-function Fval_MinusEI=Fun_MinusEI(TeD,Dh,Resph,Theta,Mu,Sigma,invR,invRRes,minZData)
+function Fval_MinusEI=Fun_MinusEI(TeD,Dh,Resph,Theta,Mu,Sigma,invR,invRRes,minResph)
 
-[ZPreds,ZCovs]=Fun_PredictionZ(TeD,Dh,Resph,Theta,Mu,Sigma,invR,invRRes);
-SD=ZCovs.^0.5;
-Bias=minZData-ZPreds;
+[RespPreds,RespCovs]=Fun_GPPrediction(TeD,Dh,Resph,Theta,Mu,Sigma,invR,invRRes);
+SD=RespCovs.^0.5;
+Bias=minResph-RespPreds;
 EIfval=Bias.*normcdf(Bias./SD)+SD.*normpdf(Bias./SD);
-EIfval(   logical( [ZCovs==0] |  min(pdist2(TeD,Dh),[],2) < 10^(-2)  )    )=0;
+EIfval(   logical( [RespCovs==0] |  min(pdist2(TeD,Dh),[],2) < 10^(-2)  )    )=0;
 Fval_MinusEI=-EIfval;
 end
