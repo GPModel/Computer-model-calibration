@@ -382,6 +382,8 @@ boxplot( SSETrue_XhatsEnd,'Labels',Labels)
 bp= gca;bp.FontSize=20;
 bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=22;
 bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
+hold on
+yline(1.5)
 set(gca,'YScale','log')
 ylabel('$S_h(\hat{\textbf{x}}^*_{\mathbf{ML}})$','FontWeight','bold','Interpreter','latex','FontSize',28);
 set(findobj(gca,'type','line'),'linew',2)

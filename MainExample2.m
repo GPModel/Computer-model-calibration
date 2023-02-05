@@ -469,9 +469,9 @@ for kd=1:2
     plot(Yh_Xhat(1,kdidx),'k:','linewidth',linewidth+3,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
     hold on
     plot(Yh_Xhat(2,kdidx),'--v','linewidth',linewidth,'MarkerFaceColor','w','MarkerSize',MarkerSize1,'MarkerIndices',[1:2:11])
-    plot(Yh_Xhat(3,kdidx),'-.bd','linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[4:2:11]),
+    plot(Yh_Xhat(3,kdidx),'--bd','linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[4:2:11 11]),
     plot(Yh_Xhat(4,kdidx),'o:r','linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[2:3:11]),
-    plot(Yh_Xhat(5,kdidx),'--ks','linewidth',linewidth,'MarkerFaceColor','w','MarkerSize',MarkerSize1,'MarkerIndices',[5:3:11]),
+    plot(Yh_Xhat(5,kdidx),'--ks','linewidth',linewidth,'MarkerFaceColor','w','MarkerSize',MarkerSize1,'MarkerIndices',[1:3:11 11]),
     plot(PhysData(kdidx),'-p','linewidth',linewidth,'MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
     xticks(1:11)
     
