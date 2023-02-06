@@ -308,7 +308,8 @@ title('(b)','FontSize',25)
 
 set(findobj(gcf,'type','axes'),'FontSize',FontSize6,'FontWeight','Bold', 'LineWidth', 3);
 
-set(gcf,'Position',[          0         0        1920         650])
+% set(gcf,'Position',[          0         0        1920         650])
+set(gcf,'Position',[          0         0        1920         626])
 
 %%
 figure(7),clf%in the Paper 
@@ -454,7 +455,7 @@ for idxMethod=1:numel(RecordTableShow2)
     SSET_End(idxMethod,1)=Table.SSETrue_Xhats(end,:);
 end
 sum([Yh_Xhat-PhysData].^2,2)
-Labels={'MBC-AGP','BC-AGP', 'Nested' ,'BC-GP','SR-GP','Field data'};
+Labels2={'MBC-AGP','BC-AGP', 'Nested' ,'BC-GP','SR-GP','Field data'};
 linewidth=3;
 MarkerSize1=15;
 figure(25),clf
@@ -502,7 +503,7 @@ for kd=1:2
     
     xlim([0.8 11.2])
     ylabel 'Temperature'
-    leg = legend(Labels,'NumColumns',2);
+    leg = legend(Labels2,'NumColumns',2);
     leg.ItemTokenSize = [70,50];
     set(gcf,'Position' , [         100         170        1800         800])
 end

@@ -317,7 +317,7 @@ load Example1Results.mat
 
 BORecordTable=[  T_MBC_AGP T_BC_AGP   T_ID_AGP T_SR_AGP T_Nested T_BC_GP T_SR_GP  ];
 FontSize=25;
-
+Labels={'MBC-AGP     ','  BC-AGP ','  ID-AGP ', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
 size(BORecordTable,1)
 for Trainidx=1:size(BORecordTable,1)
     for Methodidx=1:7
@@ -376,7 +376,6 @@ TableL2 =table(Labels1,signRank_p,ttest_p)
 
 %%
 figure(3),clf%in the Paper
-Labels={'MBC-AGP     ','  BC-AGP ','  ID-AGP ', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
 subplot(121)
 boxplot( SSETrue_XhatsEnd,'Labels',Labels)
 bp= gca;bp.FontSize=20;
@@ -451,7 +450,8 @@ ylabel('Average  $L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex',
 leg = legend(Labels,'NumColumns',4,'Location','northeast');
 leg.ItemTokenSize = [54,50];
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 2);
-set(gcf,'Position',[          0         0        1920         650])
+% set(gcf,'Position',[          0         0        1920         650])
+set(gcf,'Position',[          0         0        1920         626])
 ylim([0 0.26])
 
 %%
