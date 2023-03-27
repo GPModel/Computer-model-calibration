@@ -171,7 +171,7 @@ for id=1:size(X1,1)
     end
 end
 
-FontSizeLevels=28
+FontSizeLevels=28;
 Levels=[  80  400  1e3 2e3 4e3  10e3   20e3 40e3 60e3] ;
 
 
@@ -209,6 +209,9 @@ yticks([0:0.2:1])
 set(findobj(gcf,'type','axes'), 'FontWeight','Bold', 'LineWidth', 3);
 set(gcf,'position'  ,[          0 0         1600         561])
 % set(gcf,'position'  ,[          0 0         1600         500])
+
+
+
 %%
 %%%%%%%%%%%%%%%%%%%%R2 and MLE of error variance for linear regression of Sh on Sl m and linear regression of Sh on modified Sl
 n=51^2;
@@ -402,7 +405,7 @@ bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
 ylabel('$L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex','FontSize',28);
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 2);
 title('(b)','FontSize',25)
-set(gcf,'position'  ,[          35         386        1920         530])
+set(gcf,'position'  ,[          35         386        1920         510])
 set(gca,'yGrid','on','GridLineStyle','--')
 bp.GridLineStyle='--';
 yticks(0:0.05:3)
@@ -412,7 +415,7 @@ yticks(0:0.05:3)
 figure(4),clf%in the Paper
 tiledlayout(1,2,'Padding','none','TileSpacing','none');
 nexttile
-MarkerSize=12;
+MarkerSize=15;
 linewidth=0.1*30;
 Budget=45;
 plot(1:Budget,meanTrueSSE_Xhats_Budget(1:Budget,1),'k-o','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:3:Budget Budget]),hold on
@@ -427,13 +430,14 @@ xlim([InitialBudget,Budget+1])
 xlabel('Computational cost','FontWeight','normal')
 ylabel('Average  $S_h(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex','FontSize',35);
 yline(SSE_XMLE,'--','linewidth',4)
-text(31,SSE_XMLE*2,'True global minimum HF SSE','FontWeight','bold','FontSize',20)
-annotation(gcf,'arrow',0.07+[0.02 0],[0.230769230769231 0.18],'LineWidth',4);
+text(31.1,SSE_XMLE*2.1,'True global minimum HF SSE value','FontWeight','bold','FontSize',23)
+text(28.5,SSE_XMLE*1.1,'1.95','FontWeight','bold','FontSize',24)
+annotation(gcf,'arrow',0.07+[0.02 0],+0.01+[0.24 0.185],'LineWidth',4);
 leg = legend(Labels,'NumColumns',4,'Location','northeast');
-leg.ItemTokenSize = [54,50];
+leg.ItemTokenSize = [53,50];
 title('(a)')
 ylim([1.6 10e3])
-% xticks([30:3:45])
+grid on
 nexttile
 plot(1:Budget,meanL2_Budget(1:Budget,1),'k-o','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:3:Budget Budget]),hold on
 plot(1:Budget,meanL2_Budget(1:Budget,2),'b--o','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerFaceColor','b','MarkerIndices',[InitialBudget (InitialBudget+3):3:Budget Budget]),
@@ -448,12 +452,13 @@ title('(b)')
 set(gca,'FontWeight','bold','FontSize',FontSize)
 ylabel('Average  $L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex','FontSize',35);
 leg = legend(Labels,'NumColumns',4,'Location','northeast');
-leg.ItemTokenSize = [54,50];
+leg.ItemTokenSize = [53,50];
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 2);
 % set(gcf,'Position',[          0         0        1920         650])
 set(gcf,'Position',[          0         0        1920         626])
-ylim([0 0.26])
-
+set(gcf,'Position',[          0         0        1920         615])
+ylim([0 0.275])
+grid on
 %%
 figure(5),clf%in the Paper
 % Labels2Method={'MBC-AGP','BC-AGP'};boxplot( phiEnd(:,[1 2] ), 'Labels',Labels2Method) 
@@ -469,7 +474,7 @@ set(gca,'yGrid','on','GridLineStyle','--')
 
 %%
 %Figures in Appendix A %in the Paper
-Trainidx=137;
+Trainidx=91;
 figure(100);clf
 tiledlayout(2,4,'Padding','none','TileSpacing','none');
 pd1=1;
@@ -557,6 +562,7 @@ set(findobj(gcf,'type','axes'),'FontSize',21,'FontWeight','Bold', 'LineWidth', 2
 % set(gcf,'Position',[          0         0        1800         900])
 % %%
 set(gcf,'Position',[          0         0        1600         700])
+% set(gcf,'Position',[          0         0        1700         700])
 
 % % copygraphics(gcf)
 

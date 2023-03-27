@@ -61,7 +61,7 @@ if Level ==1%LF
     L =0.94;
     tau =30.295;
 elseif Level==2 %HF
-    L  =0.92;
+    L  =0.90;
     tau =30.295;
 end
 % if (nargin < 3)

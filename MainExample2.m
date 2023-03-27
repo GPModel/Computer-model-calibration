@@ -87,23 +87,34 @@ end
 %Plots MLE of error variance for the linear regressions of Sh on Sl, and of Sh on S'l based on 50 initial designs...
 figure(8),clf%in the Paper
 hAx=gca;
-Labels2methods={'  Linear regression of \mbox{               }' , '\mbox{            }       Linear regression of  '};
-boxplot([MLE_Error_Sh_ModifiedSl MLE_Error_ShSl  ],'Labels',Labels2methods)
-FontSize7=33;
-text(1,0.0016,'$S_h(\cdot)$ on $S''_l(\cdot)$   ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
-text(2,0.0016,'$S_h(\cdot)$ on $S_l(\cdot)$     ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
+Labels2methods={'  Linear regression of \mbox{                                              }' , '\mbox{                                   }       Linear regression of  '};
+% Labels2methods={'   \mbox{                                              }' , '\mbox{                                   }         '};
+boxplot([MLE_Error_Sh_ModifiedSl MLE_Error_ShSl  ],'Labels',Labels2methods,'OutlierSize',30)
+FontSize7=38;
+text(1,0.0006,'$S_h(\cdot)$ on $S''_l(\cdot)$   ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
+text(2,0.0006,'$S_h(\cdot)$ on $S_l(\cdot)$     ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
+% text(1,0.0040,'Linear regression of           ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
+% text(2,0.0040,'    Linear regression of   ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
+
+yline(10.^[-1 ],'--','linew',2)
+yline(10.^[0],'--','linew',2)
+yline(10.^[1],'--','linew',2)
+yline(10.^[2],'--','linew',2)
 
 hAx.XAxis.TickLabelInterpreter='latex';
-set(gca,'YScale','log','Position',[0.15 0.25 0.83 0.74] )
-set(findobj(gca,'type','line'),'linew',2)
+set(gca,'YScale','log','Position',[0.15 0.30 0.83 0.68] )
+set(findobj(gca,'type','line'),'linew',3)
 set(findobj(gcf,'type','axes'),'FontSize',FontSize7,'FontWeight','Bold', 'LineWidth', 2);
 yticks(10.^[-1 0 1 2])
-ylim([0.02  350])
-Ratio= 0.4846;
-Length=950;
-ylabel('MLE of error variance        ','FontSize',30,'HorizontalAlignment','center','VerticalAlignment','baseline')
+ylim([0.015  350])
+Ratio= 0.431;
+Length=1050;
+ylabel('MLE of error variance          ','FontSize',32,'HorizontalAlignment','center','VerticalAlignment','baseline')
 set(gcf,'position' , [100, 100 , Length ,Length*Ratio]) 
+set(gcf,'position' , [100, 100 , 1350 ,452.5500]) 
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3);
+
+%%
 
 %Plots boxplots of correlation between Sh and Sl, and Sh and modified Sl based on 50 initial designs...
 figure(21),clf
@@ -270,7 +281,7 @@ Table2 =table(Labels,mean(SSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)
 %%
 figure(6),clf%in the Paper 
 subplot(121)
-FontSize6=30;
+FontSize6=29;
 linewidth=0.1*30;
 MarkerSize1=15;
 plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,1),'ko-','linewidth',linewidth+1,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget:6:Budget Budget]),hold on
@@ -300,7 +311,7 @@ xlim([InitialBudget,Budget+1])
 xlabel('Computational cost','FontWeight','normal')
 ylabel('Average  $L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex');  %log10
 ylim([0.45   1.21])
-yticks([0.5:0.2:1.2 1.2])
+yticks([0.5:0.2:1.2 ] )
 leg = legend(Labels,'NumColumns',3,'Location','northeast');
 leg.ItemTokenSize = [73,50];
 set(gca,'Position',[0.58 0.2 0.41 0.71])
@@ -309,7 +320,8 @@ title('(b)','FontSize',25)
 set(findobj(gcf,'type','axes'),'FontSize',FontSize6,'FontWeight','Bold', 'LineWidth', 3);
 
 % set(gcf,'Position',[          0         0        1920         650])
-set(gcf,'Position',[          0         0        1920         626])
+% set(gcf,'Position',[          0         0        1920         626])
+ set(gcf,'Position',[          0         0        1920         615])
 
 %%
 figure(7),clf%in the Paper 
@@ -377,50 +389,46 @@ for Methodidx =1:2
 %         Ticks0=[0:0.2:1];
 %         Ticks1=SimMin(pd1)+(SimMax(pd1)-SimMin(pd1)).*Ticks0;
         xticks([0:0.2:1]);
-%         xticklabels(mat2cell(Ticks1,1,6))
-%         if kd>=6
-%             xtickangle(20)
-%         end
-        
-%         Ticks0=[0:0.2:1];
-%         Ticks2=SimMin(pd2)+(SimMax(pd2)-SimMin(pd2)).*Ticks0;
         yticks([0:0.2:1])
-%         yticklabels(mat2cell(Ticks2,1,6))
-        
+
         lim0=0.02;
         xlim( [-lim0 1+lim0])
         ylim( [-lim0 1+lim0])
-        
-%          
-                 
+                         
         if kd==1
-           xticklabels({'0.5'  ,  '0.54' ,   '0.58'  ,  '0.62'  ,  '0.66',    '0.70'})
-           yticklabels({'0.12'  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
+           xticklabels({'0.5'  ,  '0.54' ,   '0.58'  ,  '0.62'  ,  '0.66',    '0.7'})
+%             yticks([0  0.2     0.3889  0.6:0.2:1])            
+           yticklabels({'0.12 '  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
         end
         
         if kd==2 
-            xticklabels({'0.5'  ,  '0.54' ,   '0.58'  ,  '0.62'  ,  '0.66',    '0.70'})
-            yticklabels({'0.0004'      ,'0.00052'      ,'0.00064'      ,'0.00076'      ,'0.00088'         ,'0.001'})
+            xticklabels({'0.5'  ,  '0.54' ,   '0.58'  ,  '0.62'  ,  '0.66',    '0.7'})
+%             yticks([0  0.1666666666  0.4:0.2:1])            
+            yticklabels({'0.0004'      ,'0.00052'      ,'0.00064'      ,'0.00076'      ,'0.00088'         ,'0.001 '})
         end
         
         if kd==3
             xticklabels({'0.5'  ,  '0.54' ,   '0.58'  ,  '0.62'  ,  '0.66',    '0.7'})
-            yticklabels({'0'   ,       '0.2'  ,        '0.4'  ,        '0.6'  ,        '0.8'   ,      '1'}            )
+            yticklabels({'0'   ,       '0.2'  ,        '0.4'  ,        '0.6'  ,        '0.8'   ,      '1 '}            )
         end
 
-
         if kd==4
-           xticklabels({'0.12'  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
-           yticklabels({'0.0004'      ,'0.00052'      ,'0.00064'      ,'0.00076'      ,'0.00088'         ,'0.001'})
+%            xticks([0  0.2     0.3889  0.6:0.2:1])            
+           xticklabels({'0.12 '  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
+%             yticks([0  0.1666666666  0.4:0.2:1])
+            yticklabels({'0.0004'      ,'0.00052'      ,'0.00064'      ,'0.00076'      ,'0.00088'         ,'0.001 '})
         end
         
         if kd==5
-            xticklabels({'0.12'  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
-            yticklabels({'0'   ,       '0.2'  ,        '0.4'  ,        '0.6'  ,        '0.8'   ,      '1'}            )
+%             xticks([0  0.2     0.3889  0.6:0.2:1])            
+           xticklabels({'0.12 '  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
+            yticklabels({'0'   ,       '0.2'  ,        '0.4'  ,        '0.6'  ,        '0.8'   ,      '1 '}            )
         end
         
         if kd==6
-            xticklabels({'0.0004           '      ,' 0.00052       '      ,'  0.00064    '      ,'    0.00076  '      ,'      0.00088'         ,'       0.001'})
+%             xticks([0  0.1666666666  0.4:0.2:1])
+            %xticklabels({'0.0004        '      ,' 0.00052       '      ,'  0.00064    '      ,'    0.00076  '      ,'      0.00088'         ,'       0.001'})%1
+            xticklabels({'.0004   '      ,' .00052    '      ,'  .00064   '      ,'    .00076  '      ,'    .00088'         ,'   .001'})
             yticklabels({'0'   ,       '0.2'  ,        '0.4'  ,        '0.6'  ,        '0.8'   ,      '1'}            )
         end
         
