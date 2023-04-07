@@ -87,14 +87,18 @@ end
 %Plots MLE of error variance for the linear regressions of Sh on Sl, and of Sh on S'l based on 50 initial designs...
 figure(8),clf%in the Paper
 hAx=gca;
-Labels2methods={'  Linear regression of \mbox{                                              }' , '\mbox{                                   }       Linear regression of  '};
-% Labels2methods={'   \mbox{                                              }' , '\mbox{                                   }         '};
+Labels2methods={'    ' , '  '};
 boxplot([MLE_Error_Sh_ModifiedSl MLE_Error_ShSl  ],'Labels',Labels2methods,'OutlierSize',30)
-FontSize7=38;
-text(1,0.0006,'$S_h(\cdot)$ on $S''_l(\cdot)$   ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
-text(2,0.0006,'$S_h(\cdot)$ on $S_l(\cdot)$     ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
-% text(1,0.0040,'Linear regression of           ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
-% text(2,0.0040,'    Linear regression of   ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
+FontSize7=39;
+text(1,0.004,'Linear regression of','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
+text(2,0.004,'Linear regression of','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
+
+text(1,0.00055,'$S_h(\cdot)$ on $S^+_l(\cdot)$   ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
+text(2,0.00055,'$S_h(\cdot)$ on $S_l(\cdot)$     ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
+
+text(1,10,'MLE of error','FontWeight','Bold','FontSize',FontSize7,'HorizontalAlignment','center','Rotation',90')
+text(2,10,'variance','FontWeight','Bold','FontSize',FontSize7,'HorizontalAlignment','center','Rotation',90')
+
 
 yline(10.^[-1 ],'--','linew',2)
 yline(10.^[0],'--','linew',2)
@@ -107,11 +111,7 @@ set(findobj(gca,'type','line'),'linew',3)
 set(findobj(gcf,'type','axes'),'FontSize',FontSize7,'FontWeight','Bold', 'LineWidth', 2);
 yticks(10.^[-1 0 1 2])
 ylim([0.015  350])
-Ratio= 0.431;
-Length=1050;
-ylabel('MLE of error variance          ','FontSize',32,'HorizontalAlignment','center','VerticalAlignment','baseline')
-set(gcf,'position' , [100, 100 , Length ,Length*Ratio]) 
-set(gcf,'position' , [100, 100 , 1350 ,452.5500]) 
+set(gcf,'position' , [100, 100 , 1350 ,370]) 
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3);
 
 %%
@@ -129,64 +129,6 @@ set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 2,'FontSize',Fo
 set(gcf,'position', [  876   457   650   300])
 hAx=gca;
 hAx.XAxis.TickLabelInterpreter='latex';
-
-%{
-
-% New Plot figure 8 in the Paper 
-clear
-load Example2.mat
-for id =1:NoTrials
-    
-    Yl = MultiDataInput(id).Yl(1:nh,:);
-    Yh = MultiDataInput(id).Yh;
-    
-    Sl=sum( [Yl-PhysData].^2,2);
-    Sh=sum( [Yh-PhysData].^2,2);
-    
-    clear AaGrid
-    Ones=ones(nh,1);
-    for kd=1:numel(PhysData)
-        AaGrid(:,kd)=regress(Yh(1:nh,kd),[Ones,Yl(:,kd)]);
-    end
-    
-    ModifiedYl=AaGrid(1,:)+Yl.*AaGrid(2,:);
-    ModifiedSl=sum((ModifiedYl-PhysData).^2,2);
-    
-    CorrSlSh(id,1)=corr(Sl,Sh);
-    CorrModifiedSlSh(id,1)=corr(ModifiedSl,Sh);
-
-    
-    [~,~,r_ShSl]=regress(Sh,[Ones,Sl]);
-    MLE_Error_ShSl(id,1)=(sum(r_ShSl.^2))/(nh);
-        
-    [~,~,r_Sh_ModifiedSl]=regress(Sh,[Ones,ModifiedSl]);
-    MLE_Error_Sh_ModifiedSl(id,1)=(sum(r_Sh_ModifiedSl.^2))/(nh);
-    
-end
-
-%Plots MLE of error variance for the linear regressions of Sh on Sl, and of Sh on S'l based on 50 initial designs...
-figure(8),clf%in the Paper
-hAx=gca;
-Labels2methods={'  Linear regression of \mbox{               }' , '\mbox{            }       Linear regression of  '};
-boxplot([MLE_Error_Sh_ModifiedSl MLE_Error_ShSl  ],'Labels',Labels2methods)
-FontSize7=33;
-text(1,0.0015,'$S_h(\cdot)$ on $S''_l(\cdot)$   ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
-text(2,0.0015,'$S_h(\cdot)$ on $S_l(\cdot)$     ','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center','Interpreter','latex')
-
-hAx.XAxis.TickLabelInterpreter='latex';
-set(gca,'YScale','log','Position',[0.15 0.26 0.83 0.73] )
-set(findobj(gca,'type','line'),'linew',2)
-set(findobj(gcf,'type','axes'),'FontSize',FontSize7,'FontWeight','Bold', 'LineWidth', 2);
-yticks(10.^[-1 0 1 2])
-ylim([0.02  350])
-Ratio= 0.4846;
-Length=950;
-ylabel('MLE of error variance        ','FontSize',28,'HorizontalAlignment','center','VerticalAlignment','baseline')
-set(gcf,'position' , [100, 100 , 928 ,400]) 
-set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3);
-
-
-%}
 
 %%
 % Run BO
@@ -310,46 +252,54 @@ plot(1:Budget,meanL2s_Xhats_Budget(1:Budget,5),'--s','color',[0.4660 0.6740 0.18
 xlim([InitialBudget,Budget+1])
 xlabel('Computational cost','FontWeight','normal')
 ylabel('Average  $L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex');  %log10
-ylim([0.45   1.21])
+ylim([0.47   1.25])
 yticks([0.5:0.2:1.2 ] )
+yticklabels({'0.5 ','0.7 ','0.9 ' ,'1.1 '})
+
 leg = legend(Labels,'NumColumns',3,'Location','northeast');
 leg.ItemTokenSize = [73,50];
-set(gca,'Position',[0.58 0.2 0.41 0.71])
+set(gca,'Position',[0.583 0.2 0.41 0.71])
 title('(b)','FontSize',25)
 
 set(findobj(gcf,'type','axes'),'FontSize',FontSize6,'FontWeight','Bold', 'LineWidth', 3);
-
-% set(gcf,'Position',[          0         0        1920         650])
-% set(gcf,'Position',[          0         0        1920         626])
- set(gcf,'Position',[          0         0        1920         615])
+set(gcf,'Position',[          0         100        1920         525])
 
 %%
 figure(7),clf%in the Paper 
-% Labels2Method={'MBC-AGP','BC-AGP'};boxplot( phiEnd(:,[1 2]), 'Labels',Labels2Method);
 Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};boxplot( phiEnd(:,[1 2 4]), 'Labels',Labels2Method)
 set(findobj(gca,'type','line'),'linew',2)
 set(findobj(gcf,'type','axes'),'FontSize',35,'FontWeight','Bold', 'LineWidth', 2);
 ylabel('$ \hat \varphi$','Interpreter','latex','FontSize',50,'Rotation',0,'HorizontalAlignment','right')
-set(gca,'Position',[    0.2    0.1571    0.78    0.78])
+set(gca,'Position',[    0.2    0.1571    0.78    0.77])
 set(gcf,'Position',[           409   559   900   410])%420
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 4);
 yticks([-0.2:0.1:0.5]) 
 set(gca,'yGrid','on','GridLineStyle','--')
 
+FontSize7=32;
+figure(7),clf%in the Paper 
+Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};boxplot( phiEnd(:,[1 2 4]), 'Labels',Labels2Method,'OutlierSize',10)
+Labels2Method={' ',' ',' '};
+boxplot( phiEnd(:,[1 2 4]), 'Labels',Labels2Method','OutlierSize',10)
+text(1,-0.265,'MBC-AGP','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center')
+text(2,-0.265,'BC-AGP','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center')
+text(3,-0.265,'BC-GP','FontSize',FontSize7,'FontWeight','Bold','HorizontalAlignment','center')
+set(findobj(gca,'type','line'),'linew',3)
+set(findobj(gcf,'type','axes'),'FontSize',30,'FontWeight','Bold', 'LineWidth', 3);
+
+set(gca,'Position',[    0.2    0.14    0.78    0.83])
+set(gcf,'Position',[           409   559   900   410])%420
+set(gcf,'Position',[           409   559   900   334])%420
+set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 4);
+yticks([-0.2:0.1:0.5]) 
+bp=gca;
+bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=35;
+set(gca,'yGrid','on','GridLineStyle','--')
+ylabel('$ \hat \varphi$','Interpreter','latex','FontSize',50,'Rotation',0,'HorizontalAlignment','right')
 
 %%
 
-Trainidx=13;%@@@@%This one
-% Trainidx=34;%@@@@
-
-% Trainidx=48;%@@@
-% Trainidx=45;---
-
-% Trainidx=23;%@@
-
-% Trainidx=8;
-% Trainidx=2;
-% Trainidx=3;
+Trainidx=13;
 
 aaa=[1 2 ; 1 3; 1 4; 2 3; 2 4; 3 4;];
 for Methodidx =1:2
@@ -364,7 +314,6 @@ for Methodidx =1:2
     
     figure(22+Methodidx),clf
     tiledlayout(2,3,'Padding','none','TileSpacing','none');
-    
     
     for kd=1:6
         pd1=aaa(kd,1);
@@ -386,8 +335,6 @@ for Methodidx =1:2
         xlabel(['x_' num2str(pd1)])
         ylabel(['x_' num2str(pd2)],'Rotation',0,'HorizontalAlignment','right')
 
-%         Ticks0=[0:0.2:1];
-%         Ticks1=SimMin(pd1)+(SimMax(pd1)-SimMin(pd1)).*Ticks0;
         xticks([0:0.2:1]);
         yticks([0:0.2:1])
 
@@ -397,13 +344,11 @@ for Methodidx =1:2
                          
         if kd==1
            xticklabels({'0.5'  ,  '0.54' ,   '0.58'  ,  '0.62'  ,  '0.66',    '0.7'})
-%             yticks([0  0.2     0.3889  0.6:0.2:1])            
            yticklabels({'0.12 '  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
         end
         
         if kd==2 
             xticklabels({'0.5'  ,  '0.54' ,   '0.58'  ,  '0.62'  ,  '0.66',    '0.7'})
-%             yticks([0  0.1666666666  0.4:0.2:1])            
             yticklabels({'0.0004'      ,'0.00052'      ,'0.00064'      ,'0.00076'      ,'0.00088'         ,'0.001 '})
         end
         
@@ -413,21 +358,16 @@ for Methodidx =1:2
         end
 
         if kd==4
-%            xticks([0  0.2     0.3889  0.6:0.2:1])            
            xticklabels({'0.12 '  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
-%             yticks([0  0.1666666666  0.4:0.2:1])
             yticklabels({'0.0004'      ,'0.00052'      ,'0.00064'      ,'0.00076'      ,'0.00088'         ,'0.001 '})
         end
         
         if kd==5
-%             xticks([0  0.2     0.3889  0.6:0.2:1])            
            xticklabels({'0.12 '  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
             yticklabels({'0'   ,       '0.2'  ,        '0.4'  ,        '0.6'  ,        '0.8'   ,      '1 '}            )
         end
         
         if kd==6
-%             xticks([0  0.1666666666  0.4:0.2:1])
-            %xticklabels({'0.0004        '      ,' 0.00052       '      ,'  0.00064    '      ,'    0.00076  '      ,'      0.00088'         ,'       0.001'})%1
             xticklabels({'.0004   '      ,' .00052    '      ,'  .00064   '      ,'    .00076  '      ,'    .00088'         ,'   .001'})
             yticklabels({'0'   ,       '0.2'  ,        '0.4'  ,        '0.6'  ,        '0.8'   ,      '1'}            )
         end
@@ -445,8 +385,6 @@ for Methodidx =1:2
 
     set(findobj(gcf,'type','axes'),'FontSize',17,'FontWeight','Bold', 'LineWidth', 2);
     set(gcf,'Position' , [         100         270        1600         650])
-%     set(gcf,'Position' , [         100         270        1700         700])
-    
 end
 
 %%
@@ -467,13 +405,10 @@ Labels2={'MBC-AGP','BC-AGP', 'Nested' ,'BC-GP','SR-GP','Field data'};
 linewidth=3;
 MarkerSize1=15;
 figure(25),clf
-% tiledlayout(1,2,'Padding','none','TileSpacing','none');
 
 for kd=1:2
     subplot(1,2,kd)
-    %     nexttile
-    %         set(findobj(gcf,'type','axes'),'FontSize',24,'FontWeight','Bold', 'LineWidth', 2);
-    
+        
     kdidx=(kd-1)*11+[1:11];
     plot(Yh_Xhat(1,kdidx),'k:','linewidth',linewidth+3,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
     hold on

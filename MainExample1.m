@@ -208,9 +208,6 @@ xticks([0:0.2:1])
 yticks([0:0.2:1])
 set(findobj(gcf,'type','axes'), 'FontWeight','Bold', 'LineWidth', 3);
 set(gcf,'position'  ,[          0 0         1600         561])
-% set(gcf,'position'  ,[          0 0         1600         500])
-
-
 
 %%
 %%%%%%%%%%%%%%%%%%%%R2 and MLE of error variance for linear regression of Sh on Sl m and linear regression of Sh on modified Sl
@@ -228,12 +225,6 @@ R2_Sh_Sl_modified=stat_Sh_Sl_modified(1);
 R2=[R2_Sh_Sl_modified   R2_Sh_Sl  ]
 MLE_Error=[MLE_Error_Sh_Sl_modified MLE_Error_Sh_Sl ]
 
-
-%%%%%%%%%%%%%%%Verify the following sentence
-% This is because a transformation close to g_0.5 (S) is appropriate for the BC-AGP model, as shown in Figure 5. 
-% Indeed, for randomly chosen x, √(S_h (x) ) and √(S_l (x) ) have less heavy right tails than S_h (x) and S_l (x) respectively, 
-% which makes the AGP model better suited for modeling √(S_h (∙) ) and √(S_l (∙) ) than S_h (⋅) and S_l (⋅).
-% Plots S_l, S_h and S'_l on the 51 x 51 grid
 figure(13),clf
 subplot(221)
 histogram( fLFSSE(:) )
@@ -397,7 +388,7 @@ yticks(10.^[1:4])
 
 subplot(122)
 boxplot( L2End,'Labels',Labels)
-set(gca,'Position',[0.555 0.12 0.435 0.8])
+set(gca,'Position',[0.562 0.12 0.435 0.8])
 set(findobj(gca,'type','line'),'linew',2)
 bp= gca;bp.FontSize=20;
 bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=22;
@@ -405,7 +396,7 @@ bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
 ylabel('$L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex','FontSize',28);
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 2);
 title('(b)','FontSize',25)
-set(gcf,'position'  ,[          35         386        1920         510])
+set(gcf,'position'  ,[          0         386        1920         510])
 set(gca,'yGrid','on','GridLineStyle','--')
 bp.GridLineStyle='--';
 yticks(0:0.05:3)
@@ -437,7 +428,7 @@ leg = legend(Labels,'NumColumns',4,'Location','northeast');
 leg.ItemTokenSize = [53,50];
 title('(a)')
 ylim([1.6 10e3])
-grid on
+
 nexttile
 plot(1:Budget,meanL2_Budget(1:Budget,1),'k-o','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:3:Budget Budget]),hold on
 plot(1:Budget,meanL2_Budget(1:Budget,2),'b--o','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerFaceColor','b','MarkerIndices',[InitialBudget (InitialBudget+3):3:Budget Budget]),
@@ -454,22 +445,19 @@ ylabel('Average  $L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex',
 leg = legend(Labels,'NumColumns',4,'Location','northeast');
 leg.ItemTokenSize = [53,50];
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 2);
-% set(gcf,'Position',[          0         0        1920         650])
-set(gcf,'Position',[          0         0        1920         626])
 set(gcf,'Position',[          0         0        1920         615])
 ylim([0 0.275])
-grid on
+
 %%
 figure(5),clf%in the Paper
-% Labels2Method={'MBC-AGP','BC-AGP'};boxplot( phiEnd(:,[1 2] ), 'Labels',Labels2Method) 
-Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};boxplot( phiEnd(:,[1 2 6]), 'Labels',Labels2Method)
-% hold on,% yline(0.5)
+Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};boxplot( phiEnd(:,[1 2 6]), 'Labels',Labels2Method,'OutlierSize',10)
 set(findobj(gca,'type','line'),'linew',2)
 set(findobj(gcf,'type','axes'),'FontSize',35,'FontWeight','Bold', 'LineWidth', 2);
 ylabel('$ \hat \varphi$','Interpreter','latex','FontSize',50,'Rotation',0,'HorizontalAlignment','right')
-set(gca,'Position',[    0.2    0.1571    0.78    0.78])
-set(gcf,'Position',[           409   559   900   410])%420
-set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 4);
+set(gca,'Position',[    0.2    0.21    0.78    0.73])
+set(gcf,'Position',[           409   559   900   410])
+set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3);
+yticks([0.3:0.1:0.7])
 set(gca,'yGrid','on','GridLineStyle','--')
 
 %%
@@ -519,7 +507,6 @@ for Methodidx =1:5
     plot(XMLE(:,pd1),XMLE(:,pd2),'kp','MarkerSize',25)
     
     title(Labels(Methodidx))
-%     axis square
 end
 
 for Methodidx =6:7
@@ -556,13 +543,6 @@ for Methodidx =6:7
     ylim([-xygird0 1+xygird0])
     
     title(Labels(Methodidx))
-%     axis square
 end
 set(findobj(gcf,'type','axes'),'FontSize',21,'FontWeight','Bold', 'LineWidth', 2);
-% set(gcf,'Position',[          0         0        1800         900])
-% %%
 set(gcf,'Position',[          0         0        1600         700])
-% set(gcf,'Position',[          0         0        1700         700])
-
-% % copygraphics(gcf)
-
