@@ -169,17 +169,16 @@ pause(0.1)
 
 [ corr(fLFSSEModified(:),fHFSSE(:))  corr(fLFSSE(:),fHFSSE(:))]
  
-save Example1.mat
+
 %%
 %%%%%% %Section 2: Bayesian optimization
-load Example1.mat
 restoredefaultpath
 ZNBC_BC=1;   ZNBC_ID=0;   ZNBC_SR=2;
 ZMLFSSE=1;   ZLFSSE=0;
 
 for Group=1:10
     idx0=(Group-1)*10+[1:10]
-    parfor id=idx0
+    for id=idx0
         disp('---')
         
         [T_MBC_AGP{id,1}] =CalibrationAGP(MultiDataInput(id),ZNBC_BC,ZMLFSSE); 'MBC-AGP'
@@ -191,16 +190,13 @@ for Group=1:10
         [T_SR_GP{id,1}] =CalibrationSRGP(SingleDataInput(id)); 'SR-GP'
         
     end
-    save(['Example1Results.mat'],'T_MBC_AGP','T_BC_AGP','T_MID_AGP','T_SR_AGP','T_Nested','T_BC_GP','T_SR_GP')
+    save('Example1.mat')
     
 
 end
 %%
 %%%%%% %Section 3: Show BO results as presented in Figures 3, 4, 5, and Figure A.1
-clear
-clc
-load Example1.mat
-load Example1Results.mat
+% load Example1.mat
 
 BORecordTable=[  T_MBC_AGP T_BC_AGP   T_MID_AGP T_SR_AGP T_Nested T_BC_GP T_SR_GP  ];
 

@@ -25,3 +25,5 @@ MainExample2.m----------Replicates the simulations and gives all results for the
 Simulator.m----------Gives the HF and LF simulator outputs for Example 1 and the EnergyPlus example.
 TransformData.m----------Gives the Box-Cox, square root, or identity transformation, and the log absolute value of the Jacobian for the transformation.
 TransformData_inv.m----------Gives the inverse of the Box-Cox, square root, or identity transformation.
+Example1.mat----------Saved simulations data for Example 1.
+Example1.mat----------Saved simulations data for Example 2.

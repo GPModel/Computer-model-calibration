@@ -14,6 +14,7 @@ InitialBudget = nl*1+RatioCost*nh
 InitialBudget0= nh0*RatioCost
 Budget=InitialBudget0+15
 Budget1=Budget+1;
+NoTrials=100;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 SensorTemperatureEveryTwoHours=reshape(SensorTemperature,120,[]);
@@ -66,7 +67,6 @@ end
 
 %%
 %%%%%% %Section 2: Bayesian optimization
-load Example2.mat
 restoredefaultpath
 ZNBC_BC=1;   ZNBC_ID=0;   ZNBC_SR=2;
 ZMLFSSE=1;   ZLFSSE=0;
@@ -85,27 +85,23 @@ for Group=1:10
         [T_SR_GP{id,1},Data_SR_GP{id,1}] =CalibrationSRGP(SingleDataInput(id)); 'SR-GP'
         
     end
-    save(['Example2Results.mat'],'T_MBC_AGP','T_BC_AGP','T_MID_AGP','T_SR_AGP','T_Nested','T_BC_GP','T_SR_GP','Data_MBC_AGP','Data_BC_AGP','Data_MID_AGP','Data_SR_AGP','Data_Nested','Data_BC_GP','Data_SR_GP')
+    save('Example2Results.mat')
 end
 
 %%
 %%%%%% %Section 3: Show BO results as presented in Figures 3, 4, 5, and Figure A.1
-clc
-clear
-load Example2.mat
-load Example2Results.mat
+% load Example2.mat
 
-idx=1:100;
 Labels={'MBC-AGP','BC-AGP','MID-AGP','SR-AGP', 'Nested' ,'BC-GP','SR-GP'}' ;
-RecordTableShow=[T_MBC_AGP(idx) T_BC_AGP(idx)  T_MID_AGP(idx) T_SR_AGP(idx)  T_Nested(idx) T_BC_GP(idx) T_SR_GP(idx)  ];
-RecordDataShow=[Data_MBC_AGP(idx) Data_BC_AGP(idx) Data_MID_AGP(idx) Data_SR_AGP(idx)   Data_Nested(idx) Data_BC_GP(idx) Data_SR_GP(idx)];
+RecordTableShow=[T_MBC_AGP  T_BC_AGP   T_MID_AGP  T_SR_AGP   T_Nested  T_BC_GP  T_SR_GP   ];
+RecordDataShow=[Data_MBC_AGP  Data_BC_AGP  Data_MID_AGP  Data_SR_AGP    Data_Nested  Data_BC_GP  Data_SR_GP ];
 
 XMLE= [  0.458078384399414         0.971454620361328                         1 ];
 SSE_XMLE =3.5264931476456; %Best one given by 10 patternsearch optimization with 10^-10 funtol setting
 
 for Methodidx=7:-1:1
     AllXhats=[];
-    for Trainidx=idx
+    for Trainidx=1:NoTrials
         Table=RecordTableShow{Trainidx,Methodidx};
         
         SSETrue_XhatsEnd(Trainidx,Methodidx)=Table.SSETrue_Xhats(end,:);
