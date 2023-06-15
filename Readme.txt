@@ -26,4 +26,4 @@ Simulator.m----------Gives the HF and LF simulator outputs for Example 1 and the
 TransformData.m----------Gives the Box-Cox, square root, or identity transformation, and the log absolute value of the Jacobian for the transformation.
 TransformData_inv.m----------Gives the inverse of the Box-Cox, square root, or identity transformation.
 Example1.mat----------Saved simulations data for Example 1.
-Example1.mat----------Saved simulations data for Example 2.
+Example2.mat----------Saved simulations data for Example 2.
