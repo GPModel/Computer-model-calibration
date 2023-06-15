@@ -6,11 +6,11 @@ function [RecordTable,RecordData]=CalibrationNested(DataInput)
 %           Xhats: is MLE of the calibration parameter vector at all iterations
 %           Resphminhats: is posterior mean of the Resph at Xhats at all iterations
 %           SSETrue_Xhats: is the true values of SSE evaluated at Xhats at all iterations
-% Reference: 
+% Reference:
 % Le Gratiet L, Garnier J (2014) Recursive co-kriging model for design of computer experiments with multiple levels of fidelity. Int J Uncertain Quantif, 4(5):365-386
 % Pang, G., Perdikaris, P., Cai, W., & Karniadakis, G. E. (2017). Discovering variable fractional orders of advection-dispersion equations from field data using multi-fidelity Bayesian optimization. Journal of Computational Physics, 348, 694-714.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+nugget=1e-6;
 %%%%%%%Computes the HF response and the LF response
 Dl=DataInput.Dl;
 Yl=DataInput.Yl;
@@ -34,24 +34,31 @@ Resplh=[Respl;Resph];
 Budget=Budget-(nl*1+nh*RatioCost);
 DlnotDh=Dl(nh+1:nl,:);
 ResplnotDh=Respl(nh+1:nl,:);
-
 if Dim==2
-    nlevel=51;
+    nlevel=2501;
 elseif Dim==3
-    nlevel=41;
-elseif Dim==4
-    nlevel=21;
+    nlevel=201;
 end
 AFPoints=(fullfact(nlevel*ones(1,Dim))-1)/(nlevel-1);
+    
 lb=0*ones(1,Dim);ub=1*ones(1,Dim);
 options=optimoptions('patternsearch','disp','off');
-
 %%%%%%%%%%%%%%%%%%%%%Bayesian optimization%%%%%%%%%%%%%%%%%%%%%
+ZFit=1;
+AFs(n,:)=0;
 while (1)
     %%%%%%%Fits the GP model and finds the minimum posterior mean using the recursive formulations by Le Gratiet L and Garnier J (2014)
-    [Thetal,Mul,Sigmal,invRl,Objfvall,condRl,invRlRes]=GPFitLF(Dl,Respl);
-    [Thetah,Rho,Muh,Sigmah,invRh,Objfvalh,condRh,invRhRes]=GPFitHF(Dh,Resph,Dl,Respl);
-    
+    if ZFit==1
+        [Thetal,Mul,Sigmal,invRl,Objfvall,condRl,invRlRes,PDFl]=GPFitLF(Dl,Respl,nugget);
+        [Thetah,Rho,Muh,Sigmah,invRh,Objfvalh,condRh,invRhRes,PDFh]=GPFitHF(Dh,Resph,Dl,Respl,nugget);
+        ZFit=0;
+    else
+        [invRl,condRl,invRlRes,FlT,Rl]=Fun_NegLogLikehoodLF_Same(Dl,Respl,Thetal,nugget,Mul,Sigmal);
+        PDFl=mvnpdf(Respl,FlT'*Mul,Rl*Sigmal);
+
+        [invRh,condRh,invRhRes,Fh,Betah,Rh]=Fun_NegLogLikehoodHF_Same(Dh,Resph,Dl,Respl,Thetah,nugget,Rho,Muh,Sigmah);
+        PDFh = mvnpdf(Resph,Fh*Betah,Rh*Sigmah);
+    end
     [minResph,minidx]=min(Resph);
     Xhat_new=Dh(minidx,:) ;
     Resphminhat_new=minResph;
@@ -64,7 +71,10 @@ while (1)
     Thetahs(n-1:n,:)=[Thetah;Thetah];
     Mus(n-1:n,:)=[Mul Muh; Mul Muh];
     condRlRhs(n-1:n,:)=[condRl,condRh;condRl,condRh];
-
+    PDFhs(n-1:n,:)=PDFh;
+    PDFls(n-1:n,:)=PDFl;
+    PDFs(n-1:n,:)=PDFh*PDFl;
+    
     Xhats(n-1:n,:)=[ Xhat_new; Xhat_new];
     Resphminhats(n-1:n,:)=[ Resphminhat_new; Resphminhat_new];
     
@@ -73,25 +83,27 @@ while (1)
     SSEXhat_new=sum( (Yh_Xhat_new-PhysData).^2);
     Yh_Xhats(n-1:n,:)=[ Yh_Xhat_new ; Yh_Xhat_new];
     SSETrue_Xhats(n-1:n,:)=[SSEXhat_new; SSEXhat_new  ];
-
+    
     if Case==2
         disp(['Xhat_new and SSETrue_Xhats at  ' num2str(n) ' -iter '  num2str(Xhats(n,:))  '    ' num2str(SSETrue_Xhats(n,:))  ])
     end
     
-    if Budget<RatioCost
+    if Budget<1
         break
     end
     
     %%%%%%%Adds the follow-up design points by maximizing the EI for the HF response
-    Obj_MinusEI_HF= @(x) Fun_MinusEI_HF(x,Dh,Resph,Dl,Respl,Thetal,Mul,Sigmal,invRl,invRlRes,Thetah,Rho,Muh,Sigmah,invRh,invRhRes,minResph);
+    Obj_MinusEI_HF= @(x) Fun_MinusEI_HF(x,Dh,Resph,Dl,Respl,Thetal,Mul,Sigmal,invRl,invRlRes,Thetah,Rho,Muh,Sigmah,invRh,invRhRes,minResph,nugget);
     fvalEIObj=Obj_MinusEI_HF(AFPoints);
     [~,Sortidx]=sort(fvalEIObj);
-    parfor id=1:10
+    parfor id=1:90
         StartPoint=AFPoints(Sortidx(id),:);
         [XBestTry(id,:),fBestTry(id,1)]=patternsearch(Obj_MinusEI_HF,StartPoint,[],[],[],[],lb,ub,[],options);
     end
     [fBest,minidx]=min(fBestTry);
-    NextPoint=XBestTry(minidx,:) ;
+    NextPoint=XBestTry(minidx,:);
+    AF=-fBest;
+    AFs([n+1 n+2],:)=AF;
     disp(['Current budget=' num2str(Budget) '. The ' num2str(n+1:n+2) '-th run will be at point ' num2str(NextPoint,' %1.3f ')    ])
     
     Dh(nh+1,:)=NextPoint;
@@ -106,7 +118,7 @@ while (1)
     D=[D ; NextPoint; NextPoint ];
     Level=[ Level ; 2 ;1];
     Resplh=[Resplh; Resph(nh+1,:) ; Respl_new];
-        
+    
     Budget=Budget-RatioCost-1;
     nh=nh+1;
     nl=nl+1;
@@ -128,40 +140,60 @@ RecordData.ZNBC=[];
 RecordData.Yh_Xhats=Yh_Xhats;
 
 %%%%%%%Stores GP model parameters and the MLE of the calibration parameter vector at all iterations with a table
-RecordTable=table(D,Level,Resplh,Sigmals,Thetals,Rhos,Sigmahs,Thetahs,Mus,Xhats,Resphminhats,SSETrue_Xhats,condRlRhs);
+RecordTable=table(D,Level,Resplh,Sigmals,Thetals,Rhos,Sigmahs,Thetahs,Mus,Xhats,Resphminhats,SSETrue_Xhats,condRlRhs,PDFhs,PDFls,PDFs,AFs);
 end
 %%
 %%%%%%%Gives ML estimates of the parameters of the GP model for the LF repsonse
-function [Thetal,Mul,Sigmal,invRl,Objfvall,condRl,invRlRes]=GPFitLF(Dl,Respl)
+function [Thetal,Mul,Sigmal,invRl,Objfvall,condRl,invRlRes,PDFl]=GPFitLF(Dl,Respl,nugget)
 
 [nl,Dim]=size(Dl);
-lb=[(0.1)*ones(1,Dim) ];
-ub=[(20)*ones(1,Dim ) ];
+lb=[(0.25)*ones(1,Dim) ];
+ub=[(15)*ones(1,Dim ) ];
 nvar=numel(lb) ;
-Objl=@(Parl) Fun_NegLogLikehoodLF(Dl,Respl,Parl);
-options=optimoptions('patternsearch','disp','off','MaxFunctionEvaluations',2000*nvar,'MaxIterations',100*nvar);
+Objl=@(Parl) Fun_NegLogLikehoodLF(Dl,Respl,Parl,nugget);
+options=optimoptions('patternsearch','disp','off','MaxFunctionEvaluations',7000*nvar,'MaxIterations',100*nvar);
 
 Sobolset=sobolset(nvar,'Skip',1e3,'Leap',1e2);
-SobolsetPoints=net(Sobolset,1000*nvar);
+StardardPoints=[net(Sobolset,9000*nvar);];
 
-parfor id=1:size(SobolsetPoints,1)
-    StartPoints(id,:)=lb + (ub-lb).*SobolsetPoints(id,:);
-    fvals(id,1)=Objl(StartPoints(id,:));
+SIZE=size(StardardPoints,1);
+fvals=zeros(SIZE,1);
+parfor id=1:SIZE
+    Point=lb + (ub-lb).*StardardPoints(id,:);
+    fvals(id,1)=Objl(Point);
 end
-[~,Sortidx]=sort(fvals);
-parfor id=1:10
-    StartPoint=StartPoints(Sortidx(id),:);
-    [XBestTry(id,:),fBestTry(id,1)]= patternsearch(Objl,StartPoint,[],[],[],[],lb,ub,[],options);
+[sortfvals,Sortfvalsidx]=sort(fvals);
+
+OPt_StardardPoints=[ StardardPoints(Sortfvalsidx(1:90),:)];
+Remain_StardardPoints=StardardPoints(Sortfvalsidx((90+1):end),:);
+Count=0;
+for kd=1:size(Remain_StardardPoints,1)
+    if min(pdist2(Remain_StardardPoints(kd,:),OPt_StardardPoints),[],2)>sqrt(nvar*0.1^2)
+        OPt_StardardPoints=[OPt_StardardPoints; Remain_StardardPoints(kd,:)];
+        Count=Count+1;
+        if Count==90
+            break
+        end
+    end
 end
+% [ size(OPt_StardardPoints,1) size(OPt_StardardPoints,1)];
+
+parfor id=1:size(OPt_StardardPoints,1)
+    Point=lb+(ub-lb).*OPt_StardardPoints(id,:);
+    [XBestTry(id,:),fBestTry(id,1)]= patternsearch(Objl,Point,[],[],[],[],lb,ub,[],options); %#ok<PFBNS>
+end
+
 [fBest,minidx]=min(fBestTry);
 Parl=XBestTry(minidx,:) ;
-[Objfvall,Mul,Sigmal,invRl,Thetal,condRl,invRlRes]=Objl(Parl);
+[Objfvall,Mul,Sigmal,invRl,Thetal,condRl,invRlRes,FlT,Rl]=Objl(Parl);
+PDFl=mvnpdf(Respl,FlT'*Mul,Rl*Sigmal);
+% save Nested37lSR.mat; return
 end
 
-function [Objfvall,Mul,Sigmal,invRl,Thetal,condRl,invRlRes]=Fun_NegLogLikehoodLF(Dl,Respl,Thetal)
+function [Objfvall,Mul,Sigmal,invRl,Thetal,condRl,invRlRes,FlT,Rl]=Fun_NegLogLikehoodLF(Dl,Respl,Thetal,nugget)
 [nl,~]=size(Respl);
 FlT=ones(1,nl);
-Rl=ComputeRmatrix2(Dl,Thetal);
+Rl=ComputeRmatrix2(Dl,Thetal,nugget);
 [invRl, logdetRl,condRl]=invandlogdet(Rl);
 FlT_invRl=FlT*invRl;
 
@@ -171,38 +203,69 @@ invRlRes=invRl*Res;
 Sigmal=Res'*invRlRes/ (nl );
 Objfvall=(nl)*log(Sigmal)+ logdetRl;
 end
+function [invRl,condRl,invRlRes,FlT,Rl]=Fun_NegLogLikehoodLF_Same(Dl,Respl,Thetal,nugget,Mul,Sigmal)
+[nl,~]=size(Respl);
+FlT=ones(1,nl);
+Rl=ComputeRmatrix2(Dl,Thetal,nugget);
+[invRl, logdetRl,condRl]=invandlogdet(Rl);
+FlT_invRl=FlT*invRl;
+
+Res=Respl-Mul;
+invRlRes=invRl*Res;
+end
+
 %%
-%Gives ML estimates of the parameters of the GP model for the discrepancy term
-function [Thetah,Rho,Muh,Sigmah,invRh,Objfvalh,condRh,invRhRes]=GPFitHF(Dh,Resph,Dl,Respl)
+% =%Gives ML estimates of the parameters of the GP model for the discrepancy term
+function [Thetah,Rho,Muh,Sigmah,invRh,Objfvalh,condRh,invRhRes,PDFh]=GPFitHF(Dh,Resph,Dl,Respl,nugget)
 
 [nh,Dim]=size(Dh);
-lb=[(0.1)*ones(1,Dim) ];
-ub=[(20)*ones(1,Dim ) ];
+lb=[(0.25)*ones(1,Dim) ];
+ub=[(15)*ones(1,Dim ) ];
 nvar=numel(lb) ;
 options=optimoptions('patternsearch','disp','off','MaxFunctionEvaluations',2000*nvar,'MaxIterations',100*nvar);
-Objh= @(Parh) Fun_NegLogLikehoodHF(Dh,Resph,Dl,Respl,Parh);
+Objh= @(Parh) Fun_NegLogLikehoodHF(Dh,Resph,Dl,Respl,Parh,nugget);
 
 Sobolset=sobolset(nvar,'Skip',1e3,'Leap',1e2);
-SobolsetPoints=net(Sobolset,1000*nvar);
-StartPoints=lb + (ub-lb).*SobolsetPoints;
+StardardPoints=[net(Sobolset,9000*nvar)];
 
-for id=1:size(SobolsetPoints,1)
-    fvals(id,1)=Objh(StartPoints(id,:));
+SIZE=size(StardardPoints,1);
+fvals=zeros(SIZE,1);
+parfor id=1:SIZE
+    Point=lb + (ub-lb).*StardardPoints(id,:);
+    fvals(id,1)=Objh(Point);
 end
-[~,Sortidx]=sort(fvals);
-parfor id=1:10
-    StartPoint=StartPoints(Sortidx(id),:);
-    [XBestTry(id,:),fBestTry(id,1)]= patternsearch(Objh,StartPoint,[],[],[],[],lb,ub,[],options);
+[sortfvals,Sortfvalsidx]=sort(fvals);
+OPt_StardardPoints=[ StardardPoints(Sortfvalsidx(1:90),:)];
+Remain_StardardPoints=StardardPoints(Sortfvalsidx((90+1):end),:);
+Count=0;
+for kd=1:size(Remain_StardardPoints,1)
+    if min(pdist2(Remain_StardardPoints(kd,:),OPt_StardardPoints),[],2)>sqrt(nvar*0.1^2)
+        OPt_StardardPoints=[OPt_StardardPoints; Remain_StardardPoints(kd,:)];
+        Count=Count+1;
+        if Count==90
+            break
+        end
+    end
 end
+% [ size(OPt_StardardPoints,1) size(OPt_StardardPoints,1)]
+
+parfor id=1:size(OPt_StardardPoints,1)
+    Point=lb+(ub-lb).*OPt_StardardPoints(id,:);
+    [XBestTry(id,:),fBestTry(id,1)]= patternsearch(Objh,Point,[],[],[],[],lb,ub,[],options);
+end
+
 [~,minidx]=min(fBestTry);
 Parh=XBestTry(minidx,:) ;
-[Objfvalh,Rho,Muh,Sigmah,invRh,Thetah,condRh,invRhRes]=Objh(Parh);
-end
+[Objfvalh,Rho,Muh,Sigmah,invRh,Thetah,condRh,invRhRes,Fh,Betah,Rh]=Objh(Parh);
+PDFh = mvnpdf(Resph,Fh*Betah,Rh*Sigmah);
 
-function [Objfvalh,Rho,Muh,Sigmah,invRh,Thetah,condRh,invRhRes]=Fun_NegLogLikehoodHF(Dh,Resph,Dl,Respl,Thetah)
+% save Nested37hSR.mat; return
+
+end
+function [Objfvalh,Rho,Muh,Sigmah,invRh,Thetah,condRh,invRhRes,Fh,Betah,Rh]=Fun_NegLogLikehoodHF(Dh,Resph,Dl,Respl,Thetah,nugget)
 [nh,~]=size(Resph);
 Fh=[Respl(1:nh,:) ones(nh,1)];
-Rh=ComputeRmatrix2(Dh,Thetah);
+Rh=ComputeRmatrix2(Dh,Thetah,nugget);
 [invRh, logdetRh,condRh]=invandlogdet(Rh);
 FhT_invRh=Fh'*invRh;
 
@@ -214,12 +277,21 @@ invRhRes=invRh*Res;
 Sigmah=Res'*invRh*Res/ (nh);
 Objfvalh=nh*log(Sigmah)+ logdetRh;
 end
+
+function [invRh,condRh,invRhRes,Fh,Betah,Rh]=Fun_NegLogLikehoodHF_Same(Dh,Resph,Dl,Respl,Thetah,nugget,Rho,Muh,Sigmah)
+[nh,~]=size(Resph);
+Fh=[Respl(1:nh,:) ones(nh,1)];
+Rh=ComputeRmatrix2(Dh,Thetah,nugget);
+[invRh, logdetRh,condRh]=invandlogdet(Rh);
+
+Betah=[Rho,Muh]';
+Res=Resph-Fh*Betah;
+invRhRes=invRh*Res;
+end
 %%
 %%%%%%%Gives the posterior mean and variance for Respl and Resph at each point from a design TeDh
-function [Predh,Covh,Predl,Covl]=Fun_Prediction(TeDh,Dh,Resph,Dl,Respl,Thetal,Mul,Sigmal,invRl,invRlRes,Thetah,Rho,Muh,Sigmah,invRh,invRhRes)
+function [Predh,Covh,Predl,Covl]=Fun_Prediction(TeDh,Dh,Resph,Dl,Respl,Thetal,Mul,Sigmal,invRl,invRlRes,Thetah,Rho,Muh,Sigmah,invRh,invRhRes,nugget)
 [nTest,~]=size(TeDh);
-nugget=1e-6;
-
 rlT=ComputeRmatrix(TeDh,Dl,Thetal);
 Predl=Mul+ rlT*invRlRes;
 
@@ -229,19 +301,19 @@ Betah=[Rho; Muh];
 Predh=fh*Betah+rhT*invRhRes;%invRh*(Resph-Fh*Betah);
 
 Covl=Sigmal*( 1+nugget- sum(rlT*invRl.*rlT,2));
+Covl2=max(Covl-nugget*Sigmal ,0);
 Covl=max(Covl ,0);
-
-Covh=Rho^2*Covl+Sigmah*( 1+nugget- sum(rhT*invRh.*rhT,2));
+Covh=Rho^2*(Covl2)+Sigmah*( 1+nugget- sum(rhT*invRh.*rhT,2));
 Covh=max(Covh,0);
 
 end
 %%
 %%%%%%%EI for the HF response
-function Fval_MinusEI_HF=Fun_MinusEI_HF(AFPoints,Dh,Resph,Dl,Respl,Thetal,Mul,Sigmal,invRl,invRlRes,Thetah,Rho,Muh,Sigmah,invRh,invRhRes,minResph)
-[Predh,Covh]=Fun_Prediction(AFPoints,Dh,Resph,Dl,Respl,Thetal,Mul,Sigmal,invRl,invRlRes,Thetah,Rho,Muh,Sigmah,invRh,invRhRes);
+function Fval_MinusEI_HF=Fun_MinusEI_HF(AFPoints,Dh,Resph,Dl,Respl,Thetal,Mul,Sigmal,invRl,invRlRes,Thetah,Rho,Muh,Sigmah,invRh,invRhRes,minResph,nugget)
+[Predh,Covh]=Fun_Prediction(AFPoints,Dh,Resph,Dl,Respl,Thetal,Mul,Sigmal,invRl,invRlRes,Thetah,Rho,Muh,Sigmah,invRh,invRhRes,nugget);
 SD=Covh.^0.5;
 Bias=minResph-Predh;
 fvalEI=Bias.*normcdf(Bias./SD)+SD.*normpdf(Bias./SD);
-fvalEI( (Covh==0) |  (min(pdist2(AFPoints,Dh),[],2) < 10^(-2)))=0;
+fvalEI( (Covh==0) |  (min(pdist2(AFPoints,Dh),[],2) < 10^(-3)))=0;
 Fval_MinusEI_HF=-fvalEI;
 end

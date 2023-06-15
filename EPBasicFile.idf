@@ -3806,7 +3806,7 @@ Coil:Cooling:Water,
     NORTH_DATAOFFICE_64fd18ff FCU Cooling Coil,  !- Name
     Always On Discrete,      !- Availability Schedule Name
   *****,                               !- Design Water Flow Rate {m3/s} <<< MODIFY X3 - FCU cooling water flowrate
-  *****,                               !- Design Air Flow Rate {m3/s} <<< MODIFY X1 - FCU cooling air flowrate
+  0.52,                               !- Design Air Flow Rate {m3/s} <<< MODIFY X1 - FCU cooling air flowrate
     12,                      !- Design Inlet Water Temperature {C}
     24,                      !- Design Inlet Air Temperature {C}
     13,                      !- Design Outlet Air Temperature {C}
@@ -3823,7 +3823,7 @@ Coil:Cooling:Water,
     SOUTH_DATAOFFICE_0ffab39a FCU Cooling Coil,  !- Name
     Always On Discrete,      !- Availability Schedule Name
   *****,                               !- Design Water Flow Rate {m3/s} <<< MODIFY X3 - FCU cooling water flowrate
-  *****,                               !- Design Air Flow Rate {m3/s} <<< MODIFY X1 - FCU cooling air flowrate
+  0.52,                               !- Design Air Flow Rate {m3/s} <<< MODIFY X1 - FCU cooling air flowrate
     12,                      !- Design Inlet Water Temperature {C}
     24,                      !- Design Inlet Air Temperature {C}
     13,                      !- Design Outlet Air Temperature {C}
@@ -3840,7 +3840,7 @@ Coil:Cooling:Water,
     2 Zone DOAS Clg Coil,    !- Name
     Always On Discrete,      !- Availability Schedule Name
   *****,                               !- Design Water Flow Rate {m3/s} <<< MODIFY X3 - FCU cooling water flowrate
-  *****,                               !- Design Air Flow Rate {m3/s} <<< MODIFY X1 - FCU cooling air flowrate
+  0.52,                               !- Design Air Flow Rate {m3/s} <<< MODIFY X1 - FCU cooling air flowrate
     12,                      !- Design Inlet Water Temperature {C}
     24,                      !- Design Inlet Air Temperature {C}
     13,                      !- Design Outlet Air Temperature {C}

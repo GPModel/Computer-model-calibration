@@ -9,35 +9,7 @@ end
 end
 %%
 function [Y,YRow]=Simulator1(xx,Level)
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% ENVIRONMENTAL MODEL FUNCTION
-%
-% Authors: Sonja Surjanovic, Simon Fraser University
-%          Derek Bingham, Simon Fraser University
-% Questions/Comments: Please email Derek Bingham at dbingham@stat.sfu.ca.
-%
-% Copyright 2013. Derek Bingham, Simon Fraser University.
-%
-% THERE IS NO WARRANTY, EXPRESS OR IMPLIED. WE DO NOT ASSUME ANY LIABILITY
-% FOR THE USE OF THIS SOFTWARE.  If software is modified to produce
-% derivative works, such modified software should be clearly marked.
-% Additionally, this program is free software; you can redistribute it
-% and/or modify it under the terms of the GNU General Public License as
-% published by the Free Software Foundation; version 2.0 of the License.
-% Accordingly, this program is distributed in the hope that it will be
-% useful, but WITHOUT ANY WARRANTY; without even the implied warranty
-% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-% General Public License for more details.
-%
-% For function details and reference information, see:
-% http://www.sfu.ca/~ssurjano/
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % OUTPUT AND INPUTS:
-%
 % y=row vector of scaled concentrations of the pollutant at the
 %     space-time vectors (s, t)
 %     Its structure is:
@@ -48,28 +20,21 @@ function [Y,YRow]=Simulator1(xx,Level)
 %     [0.5, 1, 1.5, 2, 2.5]
 % t=vector of times (optional), with default value
 %     [0.3, 0.6, ..., 60]
-%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%
 % L ∈ [0.01, 3]	location of the second spill
 % τ ∈ [30.01, 30.295]   	time of the second spill
+% D=(0.12-0.02)*xx(1)+0.02;
+% M =7+6*xx(2);
+% L=(3-0.1)*xx(1)+0.1;   
+L=(2-0.1)*xx(1)+0.1; 
+tau=(34-1)*xx(2)+1;
+    D=0.04;
+    M=13;
 
-D=(0.12-0.02)*xx(1)+0.02;
-M =7+6*xx(2);
+t=[35:5:60];
+s= [1:0.4:3];%%%%%#
 
-if Level ==1%LF
-    L =0.94;
-    tau =30.295;
-elseif Level==2 %HF
-    L  =0.90;
-    tau =30.295;
-end
-% if (nargin < 3)
-t=[0.3:0.3:60];
-% end
-% if (nargin < 2)
-s= [1, 1.5, 2, 2.5 3];
-% end
+
 
 ds=length(s);
 dt=length(t);
@@ -83,13 +48,21 @@ for (ii=1:ds)
         tj=t(jj);
         
         term1a=M / sqrt(4*pi*D*tj);
-        term1b=exp(-si^2 / (4*D*tj));
+        if Level==1
+            term1b=max(1+(-si^2 / (4*D*tj))/6,0)^6;
+        else
+            term1b=exp(-si^2 / (4*D*tj));
+        end
         term1=term1a * term1b;
         
         term2=0;
         if (tau < tj)
             term2a=M / sqrt(4*pi*D*(tj-tau));
-            term2b=exp(-(si-L)^2 / (4*D*(tj-tau)));
+            if Level==1
+                term2b=max(1+(-(si-L)^2 / (4*D*(tj-tau)))/6,0)^6;
+            else
+                term2b=exp(-(si-L)^2 / (4*D*(tj-tau)));                
+            end            
             term2=term2a * term2b;
         end
         
@@ -106,14 +79,14 @@ end
 
 %%
 function OutputForCalibration=Simulator2(x,Level)
-% x1 -  FCU cooling air flow rate m³/s [0.5,0.7]
-% x2 -  Outdoor air supply per unit floor area (m³/s)/m2 [0.12,0.3]
-% x3 -  FCU cooling water flow rate m³/s [0.0004,0.001]
-% x4 - Overnight equipment heat gain (ratio of overnight equipment heat gain to peak daytime value) n/a [0,1]
+% x1 -  Outdoor air supply per unit floor area (m³/s)/m2 [0.12,0.3]
+% x2 -  FCU cooling water flow rate m³/s [0.0004,0.001]
+% x3 - Overnight equipment heat gain (ratio of overnight equipment heat gain to peak daytime value) n/a [0,1]
 
-XNames={'x1' 'x2' 'x3' 'x4'} ;
-SimMin= [0.5   0.12  0.0004   0];
-SimMax= [0.7   0.3   0.001     1];
+XNames={'x1' 'x2' 'x3'} ;
+%SimMin= [ 0.12  0.0004   0];
+SimMin= [ 0.12  0.0004   0];
+SimMax= [  0.3   0.001   0.975];
 SimGap=SimMax-SimMin;
 SimInput=SimMin + SimGap.*x ; %Transform values of stadnardized design point in [0,1]^4 to values of EP simulation inputs
 
@@ -121,12 +94,11 @@ SimInput=SimMin + SimGap.*x ; %Transform values of stadnardized design point in 
 AllLines = readlines("EPBasicFile.idf");
 MaxLine=length(AllLines);
 
-%%%%%%%%%%%%%%%%%%Add values of x1 to x4 to the lines that contain variables by replacing '*****'
-Lines{1}=[3809 3826 3843];
-Lines{2}=[ 3427];
-Lines{3}=[ 3808 3825 3842];
-Lines{4}=[ 340 365 390 425 460 495 520 545 570 960 995];
-for var=1:4
+%%%%%%%%%%%%%%%%%%Add values of x1 to x3 to the lines that contain variables by replacing '*****'
+Lines{1}=[ 3427];
+Lines{2}=[ 3808 3825 3842];
+Lines{3}=[ 340 365 390 425 460 495 520 545 570 960 995];
+for var=1:3
     for idx=1:numel(Lines{var})
         Line=Lines{var}(idx);
         AllLines{Line}=strrep(AllLines{Line},'*****',num2str(SimInput(var),10));%
@@ -141,7 +113,7 @@ end
 
 AllLines{76}=strrep(AllLines{76},'*****',num2str(Number_TimePoint_EveryHour)); %!- Number of timesteps per hour for EP simulation
 
-%%%%%%%%%%%%%%%%%%Create the EPNewFile.idf using all the lines with added values of x1 to x4.
+%%%%%%%%%%%%%%%%%%Create the EPNewFile.idf using all the lines with added values of x1 to x3.
 NewFileName='EPNewFile.idf';
 fileID=fopen(NewFileName,'w+');
 for idxLine=1:MaxLine
@@ -150,6 +122,7 @@ end
 fclose(fileID);
 
 %%%%%%%%%%%%%%%%%%Run EP simulations based on the EPNewFile.idf%%%%%%%%%%%%%%%%%%
+%Command=['C:\Users\PearHossain\Documents\EP\energyplus      -s C   -r   -c   -p EPNewFile        -w  EPWeather.epw      EPNewFile.idf'];
 Command=['C:\EnergyPlusV9-4-0\energyplus     -s C   -r   -c   -p EPNewFile        -w  EPWeather.epw      EPNewFile.idf'];
 [status,cmdout]=system(Command); %Run EP simulations
 
