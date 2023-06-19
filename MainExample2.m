@@ -85,7 +85,7 @@ for Group=1:10
         [T_SR_GP{id,1},Data_SR_GP{id,1}] =CalibrationSRGP(SingleDataInput(id)); 'SR-GP'
         
     end
-    save('Example2Results.mat')
+    save('Example2.mat')
 end
 
 %%
@@ -169,13 +169,15 @@ plot(1:Budget1,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget1,7),'--s','linewidth',l
 xlim([InitialBudget,Budget1])
 xlabel('Computational cost','FontWeight','normal')
 ylabel('Average  $S_h(\hat{\textbf{x}}^*_{\mathbf{ML}})$-3.526493  {   }','Interpreter','latex');
-leg = legend(Labels,'NumColumns',3,'Location','best','fontsize',20);
+leg = legend(Labels,'NumColumns',3,'Location','northeast','fontsize',20);
 leg.ItemTokenSize = [73,50];
 set(gca,'YScale','log','FontSize',FontSize6,'FontWeight','Bold', 'LineWidth', 3);
 yticks([.0625 0.125 0.25 0.5 1 2 4 8 ])
-ylim([0.05 10])
+ylim([0.05 11])
 set(gca,'Position',[0.1 0.2 0.41 0.71])
 title('(a)','FontSize',25,'FontWeight','Bold')
+xticks([48:2:62 64])
+xlim([47.9 64.2])
 
 subplot(122)
 plot(1:Budget,meanL2s_Xhats_Budget(1:Budget,1),'ko-','linewidth',linewidth+1,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget:6:Budget Budget]),hold on
@@ -188,14 +190,16 @@ plot(1:Budget1,meanL2s_Xhats_Budget(1:Budget1,7),'--s','linewidth',linewidth+1,'
 xlim([InitialBudget,Budget+1])
 xlabel('Computational cost','FontWeight','normal')
 ylabel('Average  $L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex');  
-yticks([0.1:0.2:1.2 ] )
-leg = legend(Labels,'NumColumns',3,'Location','best','fontsize',20);
+yticks([0.2 0.3:0.1:1.2 ] )
+leg = legend(Labels,'NumColumns',3,'Location','northeast','fontsize',20);
 leg.ItemTokenSize = [73,45];
 set(gca,'Position',[0.583 0.2 0.41 0.71])
 title('(b)','FontSize',24,'FontWeight','Bold')
 ylim([0.19  0.8])
 set(findobj(gcf,'type','axes'),'FontSize',FontSize6,'FontWeight','Bold', 'LineWidth', 3);
 set(gcf,'Position',[          0         100        1920         615])
+xticks([48:2:62 64])
+xlim([47.9 64.2])
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(7),clf
@@ -218,7 +222,7 @@ text(1,1.15*medians(1),['Median=' num2str(medians(1),2)],'HorizontalAlignment','
 text(2,1.091*medians(2),['Median=' num2str(medians(2),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
 text(3,1.2*medians(3),['Median=' num2str(medians(3),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
 xlim([0.45 3.55])
-
+%%
 %%%%%%%%%%%%%%%%
 Trainidx=2;
 aaa=[1 2 ; 1 3;2 3;];
@@ -325,7 +329,7 @@ for kd=1:2
     xticks(1:11)
     
     if kd==1
-        ylim([20.8 24.4])
+        ylim([20.8 24.6])
         title('(a)','FontWeight','bold')
         set(gca,'Position',[0.065 0.255 0.425 0.695])
     else
@@ -372,7 +376,7 @@ for kd=1:2
     xticks(1:11)
     
     if kd==1
-        ylim([20.8 24.4])
+        ylim([20.8 24.6])
         title('(a)','FontWeight','bold')
         set(gca,'Position',[0.065 0.255 0.425 0.695])
     else

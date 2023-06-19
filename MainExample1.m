@@ -243,32 +243,12 @@ meanL2_Budget=mean(L2_Budget,3);
 
 idx1=1;
 for idx2=1:7
-    if idx2<=5
-        [ ~, ttest_p_Sh(idx2,1)]=ttest(DiffSSETrue_XhatsEnd(:,idx1),DiffSSETrue_XhatsEnd(:,idx2));
-        signRank_p_Sh(idx2,1)=signrank(DiffSSETrue_XhatsEnd(:,idx1),DiffSSETrue_XhatsEnd(:,idx2));
-    else
-        [ ~, ttest_p_Sh(idx2,1)]=ttest(DiffSSETrue_XhatsEnd(:,idx1),DiffSSETrue_XhatsEnd(:,idx2));
-        signRank_p_Sh(idx2,1)=signrank(DiffSSETrue_XhatsEnd(:,idx1),DiffSSETrue_XhatsEnd(:,idx2));
-    end
-    NumberWinSh(idx2,1) = sum(DiffSSETrue_XhatsEnd(:,idx2)> DiffSSETrue_XhatsEnd(:,idx1));
+    [ ~, ttest_p_Sh(idx2,1)]=ttest(DiffSSETrue_XhatsEnd(:,idx1),DiffSSETrue_XhatsEnd(:,idx2));
+    [ ~, ttest_p_L2(idx2,1)]=ttest(L2End(:,idx1),L2End(:,idx2));
 end
 Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs ID-AGP ','(i) vs SR-AGP ' ' (i) vs Nested' ,' (i) vs BC-GP',' (i) vs SR-GP'}';
-TableSh =table(Labels1,signRank_p_Sh,ttest_p_Sh);
 
-for idx2=1:7
-    if idx2<=5    
-    signRank_p_L2(idx2,1)=signrank(L2End(:,idx1),L2End(:,idx2));
-    [ ~, ttest_p_L2(idx2,1)]=ttest(L2End(:,idx1),L2End(:,idx2));
-    else
-            signRank_p_L2(idx2,1)=signrank(L2End(:,idx1),L2End(:,idx2));
-    [ ~, ttest_p_L2(idx2,1)]=ttest(L2End(:,idx1),L2End(:,idx2));
-
-    end
-    NumberWinL2(idx2,1) = sum(L2End(:,idx2)> L2End(:,idx1));
-end
-
-Table2 =table(Labels,mean(DiffSSETrue_XhatsEnd)',NumberWinSh,ttest_p_Sh,signRank_p_Sh,mean(L2End)',NumberWinL2,ttest_p_L2,signRank_p_L2)%Table 2 in the Paper
-
+Table2 =table(Labels,mean(DiffSSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)%Table 2 in the Paper
 
 
 Labels={'MBC-AGP            ','    BC-AGP           ','       MID-AGP         ', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
@@ -289,7 +269,9 @@ set(gca,'Position',[0.07 0.12 0.42 0.8])
 set(gca,'yGrid','on','GridLineStyle','--')
 bp.GridLineStyle='--';
 yticks([  10.^[-4:4]   ])
-
+yticks([  10.^[-4:1]   50])
+yticklabels({'10^{-4}','10^{-3}','10^{-2}', '10^{-1}','10^{0}','10^{1}'  '50'})
+ set(gca,'TickLabelInterpreter', 'tex');
 
 subplot(122)
 boxplot( L2End,'Labels',Labels)
@@ -304,10 +286,14 @@ title('(b)','FontSize',25,'FontWeight','bold')
 set(gcf,'position'  ,[          0         386        1920         510])
 set(gca,'yGrid','on','GridLineStyle','--')
 bp.GridLineStyle='--';
-yticks([  10.^[-4:4]   ])
-ylim([   0.00020    0.6])
+ylim([   0.0002    0.6])
 set(gca,'YScale','log')
+yticks([ 0.0003  10.^[-3:-1] 0.5  ]  )
+yticklabels({'3\times10^{-4}' ,'10^{-3}','10^{-2}','10^{-1}' '0.5'})
+ set(gca,'TickLabelInterpreter', 'tex');
 
+
+ 
 %%%%%%%%%%%%%%%%%%%
 FontSize=24;
 Labels={'MBC-AGP','BC-AGP','MID-AGP', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
@@ -326,7 +312,7 @@ plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,4),'--v','linewidth',lin
 plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,5),':s','linewidth',linewidth,'color',htmlGreen,'MarkerFaceColor',htmlGreen,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:4:Budget ])
 plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,6),'b-x','linewidth',linewidth,'MarkerSize',MarkerSize+10,'MarkerIndices',[InitialBudget (InitialBudget+1):3:Budget Budget])
 plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,7),'--s','linewidth',linewidth,'Color', htmlGray,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget+2):3:Budget Budget ]),hold on
-ylim([0.25 130])
+ylim([0.25 150])
 set(gca,'FontWeight','bold','FontSize',FontSize,'YScale','log')
 xlim([InitialBudget,Budget])
 xlabel('Computational cost','FontWeight','normal')
@@ -334,9 +320,10 @@ ylabel('Average  $S_h(\hat{\textbf{x}}^*_{\mathbf{ML}})-0.093939$','Interpreter'
 leg = legend(Labels,'NumColumns',3,'Location','northeast');
 leg.ItemTokenSize = [74,50];
 title('(a)','FontWeight','bold')
-yticks(10.^[-1:2])
-yticklabels({'10^-1 ','10^0 ','10^1 ','10^2 '})
-
+yticks([0.3 10.^[0:2] ])
+yticklabels({'0.3 ', '10^0 ','10^1 ','10^2 '})
+ set(gca,'TickLabelInterpreter', 'tex');
+ 
 nexttile
 plot(1:Budget,meanL2_Budget(1:Budget,1),'ko-','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:3:Budget Budget]),hold on
 plot(1:Budget,meanL2_Budget(1:Budget,2),'b:o','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerFaceColor','b','MarkerIndices',[InitialBudget (InitialBudget):2:Budget Budget]),
