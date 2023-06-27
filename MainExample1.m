@@ -86,7 +86,7 @@ for id=1:NoTrials
     SingleDataInput(id).Budget=Budget;          SingleDataInput(id).Case=Case;
 end
 
-id =86;
+id =45;
 Yl = MultiDataInput(id).Yl(1:nh,:);
 Yh = MultiDataInput(id).Yh;
 
@@ -126,7 +126,7 @@ end
 Levels=1*[  5 10 25 50 100 250 500 1000 1500 2.5e3 6e3  12e3   24e3 40e3 ] ;
 Fontsize2=32;
 FontSizeLevels=25;
-figure(22),clf%in the Paper
+figure(2),clf
 tiledlayout(1,3,'Padding','none','TileSpacing','none');
 nexttile%Figure 2 (a)
 grid on
@@ -195,7 +195,7 @@ for Group=1:10
 
 end
 %%
-%%%%%% %Section 3: Show BO results as presented in Figures 3, 4, 5, and Figure A.1
+%%%%%% %Section 3: Show BO results
 % load Example1.mat
 
 BORecordTable=[  T_MBC_AGP T_BC_AGP   T_MID_AGP T_SR_AGP T_Nested T_BC_GP T_SR_GP  ];
@@ -248,12 +248,12 @@ for idx2=1:7
 end
 Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs ID-AGP ','(i) vs SR-AGP ' ' (i) vs Nested' ,' (i) vs BC-GP',' (i) vs SR-GP'}';
 
-Table2 =table(Labels,mean(DiffSSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)%Table 2 in the Paper
+Table2 =table(Labels,mean(DiffSSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)
 
 
 Labels={'MBC-AGP            ','    BC-AGP           ','       MID-AGP         ', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure(3),clf%in the Paper
+figure(3),clf
 subplot(121)
 boxplot( DiffSSETrue_XhatsEnd,'Labels',Labels)
 bp= gca;bp.FontSize=20;
@@ -297,7 +297,7 @@ yticklabels({'3\times10^{-4}' ,'10^{-3}','10^{-2}','10^{-1}' '0.5'})
 %%%%%%%%%%%%%%%%%%%
 FontSize=24;
 Labels={'MBC-AGP','BC-AGP','MID-AGP', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
-figure(4),clf%in the Paper
+figure(4),clf
 tiledlayout(1,2,'Padding','none','TileSpacing','none');
 nexttile
 htmlGray = [128 128 128]/255;
@@ -349,7 +349,7 @@ set(gcf,'Position',[          0         0        1920         626])
 set(gcf,'Position',[          0         100        1920         615])
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-figure(5),clf%in the Paper
+figure(5),clf
 Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};
 boxplot( phiEnd(:,[1 2 6]), 'Labels',Labels2Method,'OutlierSize',10,'Widths',0.8*[1 1 1  ])
 set(findobj(gca,'type','line'),'linew',2)
@@ -373,7 +373,6 @@ xlim([0.45 3.55])
 
 
 %%%%%%%%%%%%%%%%%%%%%%
-%Figures in Appendix A %in the Paper
 Trainidx=86;
 figure(100);clf
 tiledlayout(2,8,'Padding','none','TileSpacing','none');

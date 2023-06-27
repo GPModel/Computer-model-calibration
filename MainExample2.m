@@ -89,7 +89,7 @@ for Group=1:10
 end
 
 %%
-%%%%%% %Section 3: Show BO results as presented in Figures 3, 4, 5, and Figure A.1
+%%%%%% %Section 3: Show BO results 
 % load Example2.mat
 
 Labels={'MBC-AGP','BC-AGP','MID-AGP','SR-AGP', 'Nested' ,'BC-GP','SR-GP'}' ;
@@ -97,7 +97,12 @@ RecordTableShow=[T_MBC_AGP  T_BC_AGP   T_MID_AGP  T_SR_AGP   T_Nested  T_BC_GP  
 RecordDataShow=[Data_MBC_AGP  Data_BC_AGP  Data_MID_AGP  Data_SR_AGP    Data_Nested  Data_BC_GP  Data_SR_GP ];
 
 XMLE= [  0.458078384399414         0.971454620361328                         1 ];
-SSE_XMLE =3.5264931476456; %Best one given by 10 patternsearch optimization with 10^-10 funtol setting
+SSE_XMLE =3.5264931476456; 
+
+SimMin= [ 0.12  0.0004   0];
+SimMax= [  0.3   0.001   0.975];
+SimGap=SimMax-SimMin;
+SimXMLE=SimMin + SimGap.*XMLE;
 
 for Methodidx=7:-1:1
     AllXhats=[];
@@ -148,7 +153,7 @@ for idx2=1:7
 end
 Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs MID-AGP ','(i) vs SR-AGP ' ' (i) vs Nested' ,' (i) vs BC-GP',' (i) vs SR-GP'}';
 
-Table2 =table(Labels1,mean(SSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)%Table 2 in the Paper
+Table2 =table(Labels1,mean(SSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -222,7 +227,8 @@ text(1,1.15*medians(1),['Median=' num2str(medians(1),2)],'HorizontalAlignment','
 text(2,1.091*medians(2),['Median=' num2str(medians(2),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
 text(3,1.2*medians(3),['Median=' num2str(medians(3),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
 xlim([0.45 3.55])
-%%
+
+
 %%%%%%%%%%%%%%%%
 Trainidx=2;
 aaa=[1 2 ; 1 3;2 3;];
