@@ -155,7 +155,7 @@ Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs MID-AGP ','(i) vs SR-AGP ' ' (i)
 
 Table2 =table(Labels1,mean(SSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)
 
-
+%Figure 6
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 htmlGray = [128 128 128]/255;
 htmlGreen =[0.4660 0.6740 0.1880];
@@ -206,6 +206,7 @@ set(gcf,'Position',[          0         100        1920         615])
 xticks([48:2:62 64])
 xlim([47.9 64.2])
 
+%Figure 7
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(7),clf
 Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};
@@ -229,6 +230,7 @@ text(3,1.2*medians(3),['Median=' num2str(medians(3),2)],'HorizontalAlignment','c
 xlim([0.45 3.55])
 
 
+%Figure F.1
 %%%%%%%%%%%%%%%%
 Trainidx=2;
 aaa=[1 2 ; 1 3;2 3;];
@@ -242,7 +244,7 @@ for Methodidx =1:2
     FollowDh=Data.Dh(nh+1:end,:);
     FollowDl=Data.Dl(nl+1:end,:);
     
-    figure(22+Methodidx),clf
+    figure(7+Methodidx),clf
     tiledlayout(1,3,'Padding','none','TileSpacing','none');
     
     for kd=1:3
@@ -287,10 +289,6 @@ for Methodidx =1:2
             xticklabels({'.0004   '      ,' .00052    '      ,'  .00064   '      ,'    .00076  '      ,'    .00088'         ,'   .001'})
             yticklabels({'0'   ,       '0.195'  ,        '0.39'  ,        '0.585'  ,        '0.78'   ,      '0.975'}            )
         end
-
-
-        
-        
         
     end
     
@@ -307,8 +305,9 @@ for Methodidx =1:2
     
 end
 
+
+%Figure F.2
 %%%%%%%%%%%%%%%%%%%%
-% clc
 idxTrial=68;
 
 for idxMethod=1:7
@@ -320,7 +319,7 @@ end
 Labels2={'MBC-AGP','BC-AGP','MID-AGP','SR-AGP', 'Nested','Field data'};
 linewidth=3;
 MarkerSize1=15;
-figure(25),clf
+figure(10),clf
 for kd=1:2
     subplot(1,2,kd)
     
@@ -369,7 +368,7 @@ Labels2={'MBC-AGP','BC-GP','SR-GP','Field data'};
 
 
 
-figure(26),clf
+figure(11),clf
 for kd=1:2
     subplot(1,2,kd)
     

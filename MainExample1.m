@@ -86,9 +86,9 @@ for id=1:NoTrials
     SingleDataInput(id).Budget=Budget;          SingleDataInput(id).Case=Case;
 end
 
-id =45;
-Yl = MultiDataInput(id).Yl(1:nh,:);
-Yh = MultiDataInput(id).Yh;
+Trainidx =45;
+Yl = MultiDataInput(Trainidx).Yl(1:nh,:);
+Yh = MultiDataInput(Trainidx).Yh;
 
 Sl=sum( [Yl-PhysData].^2,2);
 Sh=sum( [Yh-PhysData].^2,2);
@@ -123,7 +123,8 @@ for id=1:size(X1,1)
     end
 end
 
-Levels=1*[  5 10 25 50 100 250 500 1000 1500 2.5e3 6e3  12e3   24e3 40e3 ] ;
+%Figure 2
+Levels=1*[  3 10 25 50 100 250 500 1000 1500 2.5e3 6e3  12e3   24e3 40e3 ] ;
 Fontsize2=32;
 FontSizeLevels=25;
 figure(2),clf
@@ -164,12 +165,9 @@ grid on
 set(findobj(gca,'type','line'),'linew',4)
 set(gcf,'position'  ,[          0 150         1886         631])
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3);
-pause(0.1)
-pause(0.1)
 
 [ corr(fLFSSEModified(:),fHFSSE(:))  corr(fLFSSE(:),fHFSSE(:))]
  
-
 %%
 %%%%%% %Section 2: Bayesian optimization
 restoredefaultpath
@@ -252,6 +250,8 @@ Table2 =table(Labels,mean(DiffSSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p
 
 
 Labels={'MBC-AGP            ','    BC-AGP           ','       MID-AGP         ', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
+
+%Figure 3
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(3),clf
 subplot(121)
@@ -293,7 +293,7 @@ yticklabels({'3\times10^{-4}' ,'10^{-3}','10^{-2}','10^{-1}' '0.5'})
  set(gca,'TickLabelInterpreter', 'tex');
 
 
- 
+ %Figure 4
 %%%%%%%%%%%%%%%%%%%
 FontSize=24;
 Labels={'MBC-AGP','BC-AGP','MID-AGP', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
@@ -348,6 +348,8 @@ yticklabels({'0.02 ','0.04 ','0.08 ','0.16 ','0.32 '})
 set(gcf,'Position',[          0         0        1920         626])
 set(gcf,'Position',[          0         100        1920         615])
 
+
+%Figure 5
 %%%%%%%%%%%%%%%%%%%%%%%%
 figure(5),clf
 Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};
@@ -371,9 +373,9 @@ text(3,1.14*medians(3),['Median=' num2str(medians(3),2)],'HorizontalAlignment','
 xlim([0.45 3.55])
 
 
-
+%Figure E1
 %%%%%%%%%%%%%%%%%%%%%%
-Trainidx=86;
+Trainidx=45;
 figure(100);clf
 tiledlayout(2,8,'Padding','none','TileSpacing','none');
 pd1=1;
