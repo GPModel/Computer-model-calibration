@@ -367,7 +367,6 @@ end
 Labels2={'MBC-AGP','BC-GP','SR-GP','Field data'};
 
 
-
 figure(11),clf
 for kd=1:2
     subplot(1,2,kd)
@@ -375,7 +374,7 @@ for kd=1:2
     kdidx=(kd-1)*11+[1:11];
     plot(Yh_Xhat(1,kdidx),'k:','linewidth',linewidth+3,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
     hold on
-    plot(Yh_Xhat(6,kdidx),'^:b','linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[3:3:11]),
+    plot(Yh_Xhat(6,kdidx),'h:b','linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1+7,'MarkerIndices',[3:3:11]),
     plot(Yh_Xhat(7,kdidx),'--r>','linewidth',linewidth,'MarkerSize',MarkerSize1,'MarkerIndices',[1:3:11 11]),
     plot(PhysData(kdidx),'-p','color',htmlGreen	, 'linewidth',linewidth,'MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
     xticks(1:11)
