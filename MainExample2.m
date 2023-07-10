@@ -232,7 +232,7 @@ xlim([0.45 3.55])
 
 %Figure F.1
 %%%%%%%%%%%%%%%%
-Trainidx=2;
+Trainidx=12;
 aaa=[1 2 ; 1 3;2 3;];
 for Methodidx =1:2
     Data=RecordDataShow{Trainidx,Methodidx};
@@ -306,8 +306,6 @@ for Methodidx =1:2
 end
 
 
-%Figure F.2
-%%%%%%%%%%%%%%%%%%%%
 idxTrial=68;
 
 for idxMethod=1:7
@@ -316,9 +314,14 @@ for idxMethod=1:7
     SSET_End(idxMethod,1)=Table.SSETrue_Xhats(end,:);
 end
 
-Labels2={'MBC-AGP','BC-AGP','MID-AGP','SR-AGP', 'Nested','Field data'};
 linewidth=3;
 MarkerSize1=15;
+
+
+%Figure F.2
+%%%%%%%%%%%%%%%%%%%%
+Labels1={'MBC-AGP','BC-AGP','MID-AGP','SR-AGP', 'Nested','Field data'};
+html1=[0.3010 0.7450 0.9330];
 figure(10),clf
 for kd=1:2
     subplot(1,2,kd)
@@ -326,22 +329,21 @@ for kd=1:2
     kdidx=(kd-1)*11+[1:11];
     plot(Yh_Xhat(1,kdidx),'k:','linewidth',linewidth+3,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
     hold on
-    plot(Yh_Xhat(2,kdidx),':v','linewidth',linewidth,'MarkerSize',MarkerSize1,'MarkerIndices',[1:2:11])
-    plot(Yh_Xhat(3,kdidx),':bd','linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[1:2:11 11]),
+    plot(Yh_Xhat(2,kdidx),':v','linewidth',linewidth,'color','m','MarkerSize',MarkerSize1,'MarkerIndices',[1:2:11])
+    plot(Yh_Xhat(3,kdidx),':o','color','r', 'linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[1:2:11 11]),
     plot(Yh_Xhat(4,kdidx),'--bs','linewidth',linewidth,'MarkerSize',MarkerSize1,'MarkerIndices',[2:2:11])
-    plot(Yh_Xhat(5,kdidx),'--ro','linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[2:2:11 11]),
+    plot(Yh_Xhat(5,kdidx),'--d','color',html1,'linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[2:2:11 11]),
     plot(PhysData(kdidx),'-p','color',htmlGreen	, 'linewidth',linewidth,'MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
     xticks(1:11)
     
     if kd==1
         ylim([20.8 24.6])
         title('(a)','FontWeight','bold')
-        set(gca,'Position',[0.065 0.255 0.425 0.695])
+        set(gca,'Position',[0.065 0.215 0.425 0.745])
     else
         ylim([21.4 24.6])
         title('(b)','FontWeight','bold')
-        set(gca,'Position',[0.56 0.255 0.425 0.695])
-        
+        set(gca,'Position',[0.56 0.215 0.425 0.745])
     end
     
     set(findobj(gca,'type','axes'), 'FontWeight','Bold', 'LineWidth', 2);
@@ -360,13 +362,14 @@ for kd=1:2
     
     xlim([0.8 11.2])
     ylabel('Temperature (Celsius)','FontWeight','bold')
-    leg = legend(Labels2,'NumColumns',2);
+    leg = legend(Labels1,'NumColumns',2);
     leg.ItemTokenSize = [70,50];
-    set(gcf,'Position' , [         0         59        1800         800])
+    set(gcf,'Position' , [         0         59        1800         963])
 end
+
+
 Labels2={'MBC-AGP','BC-GP','SR-GP','Field data'};
-
-
+%Figure F.3
 figure(11),clf
 for kd=1:2
     subplot(1,2,kd)

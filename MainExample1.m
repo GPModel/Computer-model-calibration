@@ -122,18 +122,18 @@ for id=1:size(X1,1)
         fHFSSE(id,jd)=sum([yh0-PhysData].^2); 
     end
 end
-
 %Figure 2
 Levels=1*[  3 10 25 50 100 250 500 1000 1500 2.5e3 6e3  12e3   24e3 40e3 ] ;
 Fontsize2=32;
-FontSizeLevels=25;
+FontSizeLevels=30;
 figure(2),clf
 tiledlayout(1,3,'Padding','none','TileSpacing','none');
 nexttile%Figure 2 (a)
 grid on
 [C,h] = contour(X1,X2,fLFSSE,Levels,'TextStep',2) ;
 clabel(C,h,'FontWeight','bold','FontSize',FontSizeLevels,'Color','k','linewidth',2)
-xlabel('x_1','FontSize',Fontsize2)
+clabel(C,h,'LabelSpacing',155,'FontWeight','bold','FontSize',FontSizeLevels,'Color','k','linewidth',2)
+text(0.47,-0.17,'x_1','FontSize',Fontsize2,'FontWeight','Bold')
 ylabel('x_2','FontSize',Fontsize2,'Rotation',0,'HorizontalAlignment','right')
 title('(a)','FontSize',Fontsize2,'FontWeight','Bold')
 xticks([0:0.2:1])
@@ -143,8 +143,9 @@ grid on
  
 nexttile%Figure 2 (b)
 [C,h] = contour(X1,X2,fHFSSE,Levels);
-clabel(C,h,'LabelSpacing',155,'FontWeight','bold','FontSize',FontSizeLevels,'Color','k','linewidth',2)
-xlabel('x_1','FontSize',Fontsize2)
+clabel(C,h,'LabelSpacing',200,'FontWeight','bold','FontSize',FontSizeLevels,'Color','k','linewidth',2)
+% xlabel('x_1','FontSize',Fontsize2)
+text(0.47,-0.17,'x_1','FontSize',Fontsize2,'FontWeight','Bold')
 ylabel('x_2','FontSize',Fontsize2,'Rotation',0,'HorizontalAlignment','right')
 title('(b)','FontSize',Fontsize2,'FontWeight','Bold')
 xticks([0:0.2:1])
@@ -154,8 +155,9 @@ grid on
 
 nexttile%Figure 2 (c)
 [C,h] = contour(X1,X2,fLFSSEModified,Levels,'TextStepMode','manual') ;
-clabel(C,h,'LabelSpacing',155,'FontWeight','bold','FontSize',FontSizeLevels,'Color','k','linewidth',2)
-xlabel('x_1','FontSize',Fontsize2)
+clabel(C,h,'LabelSpacing',200,'FontWeight','bold','FontSize',FontSizeLevels,'Color','k','linewidth',2)
+xlabel(' ','FontSize',Fontsize2)
+text(0.47,-0.17,'x_1','FontSize',Fontsize2,'FontWeight','Bold')
 ylabel('x_2','FontSize',Fontsize2,'Rotation',0,'HorizontalAlignment','right')
 title('(c)','FontSize',Fontsize2,'FontWeight','Bold')
 xticks([0:0.2:1])
@@ -164,7 +166,9 @@ set(gca,'FontWeight','bold','FontSize',Fontsize2)
 grid on
 set(findobj(gca,'type','line'),'linew',4)
 set(gcf,'position'  ,[          0 150         1886         631])
-set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3);
+set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3); 
+
+    
 
 [ corr(fLFSSEModified(:),fHFSSE(:))  corr(fLFSSE(:),fHFSSE(:))]
  
@@ -195,7 +199,6 @@ end
 %%
 %%%%%% %Section 3: Show BO results
 % load Example1.mat
-
 BORecordTable=[  T_MBC_AGP T_BC_AGP   T_MID_AGP T_SR_AGP T_Nested T_BC_GP T_SR_GP  ];
 
 Labels={'MBC-AGP     ','  BC-AGP ','  MID-AGP ', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
@@ -373,7 +376,7 @@ text(3,1.14*medians(3),['Median=' num2str(medians(3),2)],'HorizontalAlignment','
 xlim([0.45 3.55])
 
 
-%Figure E1
+%Figure E.1
 %%%%%%%%%%%%%%%%%%%%%%
 Trainidx=45;
 figure(100);clf

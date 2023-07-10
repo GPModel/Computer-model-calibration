@@ -4,7 +4,7 @@ Matlab R2020b, Matlab Global Optimization Toolbox, Matlab Statistics and Machine
 %%%%%%%%%%%%%%%%%%%%% Step for replicating results for Example 1 %%%%%%%%%%%%%%%%%%%%%
 Step: Run MainExample1.m to obtain the results for Example 1
 
-%%%%%%%%%%%%%%%%%%%%% Steps for replicating results for EnergyPlus Example %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% Steps for replicating results for EnergyPlus example %%%%%%%%%%%%%%%%%%%%%
 Step 1: Install EnergyPlus 9.4.0 in the folder C:\EnergyPlusV9-4-0
 Step 2: Put all the Matlab codes, the EPBasicFile.idf file, and the EPWeather.epw file in a single folder.
 Step 3: Run MainExample2.m
@@ -26,4 +26,4 @@ Simulator.m----------Gives the HF and LF simulator outputs for Example 1 and the
 TransformData.m----------Gives the Box-Cox, square root, or identity transformation, and the log absolute value of the Jacobian for the transformation.
 TransformData_inv.m----------Gives the inverse of the Box-Cox, square root, or identity transformation.
 Example1.mat----------Saved simulations data for Example 1.
-Example2.mat----------Saved simulations data for Example 2.
+Example2.mat----------Saved simulations data for the EnergyPlus example.
