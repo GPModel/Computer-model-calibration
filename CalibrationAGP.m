@@ -34,8 +34,8 @@ if ZMLFSSEorZLFSSE==1
         Ylkd=SameYl(:,kd);
         Yhkd=SameYh(:,kd);
         MatrixX=[Ones2,Ylkd];
-        if Case==1
-            if all(Ylkd<10^(-12)) %only for example 2
+        if Case==2
+            if all(Ylkd<10^(-12)) %only for Example 2
                 ai_bi(:,kd)=[0,1];
                 Sum_ErrorYlYh0=sum(abs(Yhkd-Ylkd)) ;
                 if Sum_ErrorYlYh0>0
@@ -44,7 +44,7 @@ if ZMLFSSEorZLFSSE==1
             else
                 ai_bi(:,kd)=regress(Yhkd,MatrixX);
             end
-        else%Case==2
+        else%Case==1
             ai_bi(:,kd)=regress(Yhkd,MatrixX);
         end
     end
@@ -107,7 +107,7 @@ while(1)
     Yh_Xhats(n,:)=Simulator(Xhat_new,2,Case);
     SSETrue_Xhats(n,:)=sum( (Yh_Xhats(n,:)-PhysData).^2);
 
-    if Case==2
+    if Case==1
         disp(['Xhat_new and SSETrue_Xhats at  ' num2str(n) ' -iter '  num2str(Xhats(n,:))  '    ' num2str(SSETrue_Xhats(n,:))  ])
     end
     

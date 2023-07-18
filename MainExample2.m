@@ -1,7 +1,7 @@
 %%%%%% %Section 1: Sets parameters for all calibration methods 
 clc,clear,format compact
 Dim=2;
-Case=1;
+Case=2;
 nl=18;
 nh=6;
 nh0=12;

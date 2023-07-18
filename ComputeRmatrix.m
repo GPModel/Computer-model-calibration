@@ -1,4 +1,4 @@
-function R=ComputeRmatrix(Xs,Ys,Thetas)
+function R=ComputeRmatrix(Xs,Ys,Thetas) 
 [nX,Dim]=size(Xs);
 [nY,~]=size(Ys);
 

@@ -72,7 +72,7 @@ while (1)
     Yh_Xhats(n,:)=Simulator(Xhat_new,2,Case);
     SSETrue_Xhats(n,:)=sum( (Yh_Xhats(n,:)-PhysData).^2);
     
-    if Case==2
+    if Case==1
         disp(['Xhat_new and SSETrue_Xhats at  ' num2str(n) ' -iter '  num2str(Xhats(n,:))  '    ' num2str(SSETrue_Xhats(n,:))  ])
     end
     

@@ -1,4 +1,4 @@
-function R=ComputeRmatrix2(Xs,Thetas,nuggetValue)
+function R=ComputeRmatrix2(Xs,Thetas,nuggetValue) 
 if nargin==2
     nugget=1e-6;
 elseif nargin==3

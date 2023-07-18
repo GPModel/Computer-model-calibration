@@ -84,7 +84,7 @@ while (1)
     Yh_Xhats(n-1:n,:)=[ Yh_Xhat_new ; Yh_Xhat_new];
     SSETrue_Xhats(n-1:n,:)=[SSEXhat_new; SSEXhat_new  ];
     
-    if Case==2
+    if Case==1
         disp(['Xhat_new and SSETrue_Xhats at  ' num2str(n) ' -iter '  num2str(Xhats(n,:))  '    ' num2str(SSETrue_Xhats(n,:))  ])
     end
     
