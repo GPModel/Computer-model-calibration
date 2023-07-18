@@ -1,4 +1,4 @@
-function [invCovMat, logdetCovMat,condCovMat]=invandlogdet(CovMat)
+function [invCovMat, logdetCovMat,condCovMat]=invandlogdet(CovMat) 
 
     [Eigvec, Eigval]=svd(CovMat);
     Eigval=diag(Eigval);

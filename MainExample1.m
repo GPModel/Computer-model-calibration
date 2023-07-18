@@ -1,47 +1,25 @@
-%%%%%% %Section 1: Sets parameters for all calibration methods
-clc,clear,format compact
-Dim=2;
-Case=1;
-nl=18;
-nh=6;
+%%%%%% %Section 1: Sets parameters for all calibration methods 
+restoredefaultpath
+clear,clc,format compact % close all
+%Temperature measurement over 12:01 a.m. to 10:00 p.m.
+SensorTemperature=[24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24.5,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24.5;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24.5;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24.5;24,24;24,24.5;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;24,24;23.5,24;23.5,24;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23;23.5,23;23,23;23,23;23,23;23,23;23,23;23,22.5;23,22.5;23,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22;22.5,22;22.5,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;21.5,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,21.5;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,21.5;22,21.5;22,21.5;22,21.5;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22.5;22.5,22;22.5,22;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22;22.5,22;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22,22.5;21,22.5;20,22.5;19,22.5;18,22.5;17.5,22;17,22;17,22;17.5,22;17.5,22;18,22;18,22;18.5,22;18.5,22;19,22;19,22;19.5,22;20,22;20,22;20.5,22;20.5,22;21,22;21,22;21.5,22;21.5,22;21.5,22;22,22;22,22;22,22;22,22;22,22.5;22,22.5;22,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;21.5,22.5;20.5,22.5;19,22.5;18.5,22.5;18,22.5;17.5,22;17,22;17.5,22;17.5,22;18,22;18,22;18.5,22;18.5,22;19,22;19,22;19.5,22;20,22;20,22;20.5,22;20.5,22;21,22;21,22;21.5,22;21.5,22;21.5,22;21.5,22;22,22;22,22;22,22;22,22;22,22.5;22,22.5;22,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22,22.5;21,22.5;20,22.5;19,22.5;18,22.5;17.5,22;17,22;17,22;17.5,22;17.5,22;18,22;18,22;18.5,22;18.5,22;19,22;19,22;19.5,22;20,22;20,22;20.5,22;20.5,22;21,22;21,22;21,22;21.5,22;21.5,22;21.5,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;21.5,22.5;20.5,22.5;19.5,22.5;18.5,22.5;18,22.5;17.5,22;17,22;17,22;17.5,22;17.5,22;18,22;18,22;18.5,22;18.5,22;19,22;19,22;19.5,22;20,22;20,22;20.5,22;20.5,22;21,22;21,22;21,22;21.5,22;21.5,22;21.5,22;21.5,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22.5,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22;22,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;22.5,22.5;23,23;23,23;23,23;23,23;23,23;23,23;23,23;23,23;23.5,23;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5;23.5,23.5];
+Dim=3;
+XTrue='unkown';
+nh=08;
+nl=16;
 nh0=12;
-RatioCost=3;
-InitialBudget=nl*1+nh*RatioCost;
-InitialBudget0=nh0*RatioCost;
-Budget=InitialBudget+12;
-XTrue=[0.1 0.4];
-
-[yh_XTrue]= Simulator(XTrue,2,Case);
-std_error=(var(yh_XTrue)*0.0001)^0.5;
-PhysData=yh_XTrue+normrnd(0,std_error,size(yh_XTrue));
-SSE_XTrue=sum([Simulator(XTrue,2,Case)-PhysData].^2);
-
-[X1,X2]=meshgrid(linspace(0,1,51)');
-TestPoints= [X1(:) X2(:)];
-for id=1:size(TestPoints,1)
-    TrueSh(id,1)=sum((Simulator(TestPoints(id,:),2,Case)-PhysData).^2); 
-end
-[~,sortidx]=sort(TrueSh);
-
-lb=0*ones(1,Dim);
-ub=1*ones(1,Dim);
-options=optimoptions('patternsearch','MaxIterations',10^6,'MeshTolerance',10^-6,'TolFun',10^-8,'TolX',10^-8,'MaxFunEvals',10^8);
-
-SSHFun=@(x) sum([Simulator(x,2,Case)-PhysData].^2);
-for id=1:50
-    StartPoint= TestPoints(sortidx(id),:);
-    [XMLETry(id,:),fval(id,:)]=patternsearch(SSHFun,StartPoint,[],[],[],[],lb,ub,[],options)  ;
-end
-[~,minidx]=min(fval);
-XMLE=XMLETry(minidx,:);
-SSE_XMLE=min(fval);
-
-XTrue
-SSE_XTrue
-XMLE
-SSE_XMLE
-
+RatioCost=4;
+Case=2;
+InitialBudget = nl*1+RatioCost*nh
+InitialBudget0= nh0*RatioCost
+Budget=InitialBudget0+15
+Budget1=Budget+1;
 NoTrials=100;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+SensorTemperatureEveryTwoHours=reshape(SensorTemperature,120,[]);
+PhysData=mean(SensorTemperatureEveryTwoHours);
+
 parfor id=1:NoTrials
     id
     rand
@@ -53,16 +31,15 @@ parfor id=1:NoTrials
     Dh0s(:,:,id)=Dh0;    
 end
 
-
-for id=1:NoTrials
-    id
-
+for id =1:NoTrials
+    rand
+    disp(id)
     Dl=Dls(:,:,id);
     Dh=Dhs(:,:,id);
     Dh0=Dh0s(:,:,id);
-    
     clear Yl Yh
     for jd=1:nl
+        [id jd]
         Yl(jd,:)=Simulator(Dl(jd,:),1,Case);
     end
     for jd=1:nh
@@ -77,101 +54,18 @@ for id=1:NoTrials
     MultiDataInput(id).Dh= Dh;    MultiDataInput(id).Yh=Yh;
     MultiDataInput(id).XTrue=XTrue;
     MultiDataInput(id).PhysData=PhysData;    MultiDataInput(id).RatioCost=RatioCost;
-    MultiDataInput(id).Budget=Budget;           MultiDataInput(id).Case=Case;
+    MultiDataInput(id).Budget=Budget;        MultiDataInput(id).Case=Case;
     
     SingleDataInput(id).Dl =[] ;       SingleDataInput(id).Yl=[];
     SingleDataInput(id).Dh= Dh0;    SingleDataInput(id).Yh=Yh0;
     SingleDataInput(id).XTrue=XTrue;
     SingleDataInput(id).PhysData=PhysData;    SingleDataInput(id).RatioCost=RatioCost;
-    SingleDataInput(id).Budget=Budget;          SingleDataInput(id).Case=Case;
-end
-
-Trainidx =45;
-Yl = MultiDataInput(Trainidx).Yl(1:nh,:);
-Yh = MultiDataInput(Trainidx).Yh;
-
-Sl=sum( [Yl-PhysData].^2,2);
-Sh=sum( [Yh-PhysData].^2,2);
-
-clear AaGrid
-Ones=ones(nh,1);
-for kd=1:numel(PhysData)
-    if all(Yl(:,kd)<10^(-12)) %only for example 1
-        AaGrid(:,kd)=[0,1];
-        Sum_ErrorYlYh0=sum(abs(Yh(:,kd)-Yl(:,kd))) ;
-        if Sum_ErrorYlYh0>0
-            return
-        end
-    else
-        AaGrid(:,kd)=regress(Yh(:,kd),[Ones,Yl(:,kd)]);
-    end
-end
-
-
-
-[X1,X2]=meshgrid(linspace(0,1,501)');
-for id=1:size(X1,1)
-    for jd=1:size(X1,2)
-        yl0=Simulator([X1(id,jd),X2(id,jd)],1,Case);
-        yh0=Simulator([X1(id,jd),X2(id,jd)],2,Case);
-        YlModifiedGrid=AaGrid(1,:)+yl0.*AaGrid(2,:);
-        
-        fLFSSEModified(id,jd)=sum((YlModifiedGrid-PhysData).^2); 
-        
-        fLFSSE(id,jd)=sum([yl0-PhysData].^2); 
-        fHFSSE(id,jd)=sum([yh0-PhysData].^2); 
-    end
-end
-%Figure 2
-Levels=1*[  3 10 25 50 100 250 500 1000 1500 2.5e3 6e3  12e3   24e3 40e3 ] ;
-Fontsize2=32;
-FontSizeLevels=30;
-figure(2),clf
-tiledlayout(1,3,'Padding','none','TileSpacing','none');
-nexttile%Figure 2 (a)
-grid on
-[C,h] = contour(X1,X2,fLFSSE,Levels,'TextStep',2) ;
-clabel(C,h,'FontWeight','bold','FontSize',FontSizeLevels,'Color','k','linewidth',2)
-clabel(C,h,'LabelSpacing',155,'FontWeight','bold','FontSize',FontSizeLevels,'Color','k','linewidth',2)
-text(0.47,-0.17,'x_1','FontSize',Fontsize2,'FontWeight','Bold')
-ylabel('x_2','FontSize',Fontsize2,'Rotation',0,'HorizontalAlignment','right')
-title('(a)','FontSize',Fontsize2,'FontWeight','Bold')
-xticks([0:0.2:1])
-yticks([0:0.2:1])
-set(gca,'FontWeight','bold','FontSize',Fontsize2)
-grid on
- 
-nexttile%Figure 2 (b)
-[C,h] = contour(X1,X2,fHFSSE,Levels);
-clabel(C,h,'LabelSpacing',200,'FontWeight','bold','FontSize',FontSizeLevels,'Color','k','linewidth',2)
-% xlabel('x_1','FontSize',Fontsize2)
-text(0.47,-0.17,'x_1','FontSize',Fontsize2,'FontWeight','Bold')
-ylabel('x_2','FontSize',Fontsize2,'Rotation',0,'HorizontalAlignment','right')
-title('(b)','FontSize',Fontsize2,'FontWeight','Bold')
-xticks([0:0.2:1])
-yticks([0:0.2:1])
-set(gca,'FontWeight','bold','FontSize',Fontsize2)
-grid on
-
-nexttile%Figure 2 (c)
-[C,h] = contour(X1,X2,fLFSSEModified,Levels,'TextStepMode','manual') ;
-clabel(C,h,'LabelSpacing',200,'FontWeight','bold','FontSize',FontSizeLevels,'Color','k','linewidth',2)
-xlabel(' ','FontSize',Fontsize2)
-text(0.47,-0.17,'x_1','FontSize',Fontsize2,'FontWeight','Bold')
-ylabel('x_2','FontSize',Fontsize2,'Rotation',0,'HorizontalAlignment','right')
-title('(c)','FontSize',Fontsize2,'FontWeight','Bold')
-xticks([0:0.2:1])
-yticks([0:0.2:1])
-set(gca,'FontWeight','bold','FontSize',Fontsize2)
-grid on
-set(findobj(gca,'type','line'),'linew',4)
-set(gcf,'position'  ,[          0 150         1886         631])
-set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3); 
-
+    SingleDataInput(id).Budget=Budget;        SingleDataInput(id).Case=Case;
     
+    save Example1.mat
 
-[ corr(fLFSSEModified(:),fHFSSE(:))  corr(fLFSSE(:),fHFSSE(:))]
- 
+end
+
 %%
 %%%%%% %Section 2: Bayesian optimization
 restoredefaultpath
@@ -183,33 +77,42 @@ for Group=1:10
     for id=idx0
         disp('---')
         
-        [T_MBC_AGP{id,1}] =CalibrationAGP(MultiDataInput(id),ZNBC_BC,ZMLFSSE); 'MBC-AGP'
-        [T_BC_AGP{id,1}] =CalibrationAGP(MultiDataInput(id),ZNBC_BC,ZLFSSE); 'BC-AGP'
-        [T_MID_AGP{id,1}] =CalibrationAGP(MultiDataInput(id),ZNBC_ID,ZMLFSSE); 'MID-AGP'
-        [T_SR_AGP{id,1}] =CalibrationAGP(MultiDataInput(id),ZNBC_SR,ZLFSSE); 'SR-AGP'
-        [T_Nested{id,1}] =CalibrationNested(MultiDataInput(id)); 'Nested'
-        [T_BC_GP{id,1}] =CalibrationBCGP(SingleDataInput(id)); 'BC-GP'
-        [T_SR_GP{id,1}] =CalibrationSRGP(SingleDataInput(id)); 'SR-GP'
+        [T_MBC_AGP{id,1},Data_MBC_AGP{id,1}] =CalibrationAGP(MultiDataInput(id),ZNBC_BC,ZMLFSSE); 'MBC-AGP'
+        [T_BC_AGP{id,1},Data_BC_AGP{id,1}] =CalibrationAGP(MultiDataInput(id),ZNBC_BC,ZLFSSE); 'BC-AGP'
+        [T_MID_AGP{id,1},Data_MID_AGP{id,1}] =CalibrationAGP(MultiDataInput(id),ZNBC_ID,ZMLFSSE); 'MID-AGP'
+        [T_SR_AGP{id,1},Data_SR_AGP{id,1}] =CalibrationAGP(MultiDataInput(id),ZNBC_SR,ZLFSSE); 'SR-AGP'
+        [T_Nested{id,1},Data_Nested{id,1}] =CalibrationNested(MultiDataInput(id)); 'Nested'
+        [T_BC_GP{id,1},Data_BC_GP{id,1}] =CalibrationBCGP(SingleDataInput(id)); 'BC-GP'
+        [T_SR_GP{id,1},Data_SR_GP{id,1}] =CalibrationSRGP(SingleDataInput(id)); 'SR-GP'
         
     end
     save('Example1.mat')
-    
-
 end
-%%
-%%%%%% %Section 3: Show BO results
-% load Example1.mat
-BORecordTable=[  T_MBC_AGP T_BC_AGP   T_MID_AGP T_SR_AGP T_Nested T_BC_GP T_SR_GP  ];
 
-Labels={'MBC-AGP     ','  BC-AGP ','  MID-AGP ', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
-size(BORecordTable,1)
-for Trainidx=1:size(BORecordTable,1)
-    for Methodidx=1:7
-        Table=BORecordTable{Trainidx,Methodidx} ;
+%%
+%%%%%% %Section 3: Show BO results 
+% load Example1.mat
+
+Labels={'MBC-AGP','BC-AGP','MID-AGP','SR-AGP', 'Nested' ,'BC-GP','SR-GP'}' ;
+RecordTableShow=[T_MBC_AGP  T_BC_AGP   T_MID_AGP  T_SR_AGP   T_Nested  T_BC_GP  T_SR_GP   ];
+RecordDataShow=[Data_MBC_AGP  Data_BC_AGP  Data_MID_AGP  Data_SR_AGP    Data_Nested  Data_BC_GP  Data_SR_GP ];
+
+XMLE= [  0.458078384399414         0.971454620361328                         1 ];
+SSE_XMLE =3.5264931476456; 
+
+SimMin= [ 0.12  0.0004   0];
+SimMax= [  0.3   0.001   0.975];
+SimGap=SimMax-SimMin;
+SimXMLE=SimMin + SimGap.*XMLE;
+
+for Methodidx=7:-1:1
+    AllXhats=[];
+    for Trainidx=1:NoTrials
+        Table=RecordTableShow{Trainidx,Methodidx};
         
-        DiffSSETrue_XhatsEnd(Trainidx,Methodidx)=Table.SSETrue_Xhats(end,:)-SSE_XMLE;
-        XhatsEnd=Table.Xhats(end,:);
-        L2End(Trainidx,Methodidx)=norm(XhatsEnd-XMLE);
+        SSETrue_XhatsEnd(Trainidx,Methodidx)=Table.SSETrue_Xhats(end,:);
+        XhatsEnd = Table.Xhats(end,:);
+        L2End(Trainidx,Methodidx)=norm(XhatsEnd-XMLE);L2End_a2=L2End;
         if Methodidx<=2 || Methodidx==6
             phiEnd(Trainidx,Methodidx)=Table.phis(end,:);
         end
@@ -217,259 +120,297 @@ for Trainidx=1:size(BORecordTable,1)
         costs=[1 RatioCost]';
         SSETrue_Xhats_iter=Table.SSETrue_Xhats;
         Xhats_iter=Table.Xhats;
+        AllXhats=[AllXhats;];
         L2s_iter=sum((Xhats_iter-XMLE).^2,2).^0.5;
         Level_iter=Table.Level;
         Budget_iter=cumsum(costs(Level_iter));
         
-        TrueSSE_Xhats_Budget(1:Budget,Methodidx,Trainidx) = interp1(Budget_iter,SSETrue_Xhats_iter,1:Budget);
-        
-        L2_Budget(1:Budget,Methodidx,Trainidx)=interp1(Budget_iter,L2s_iter,1:Budget);
-        
-        if Methodidx==5%Nested
-            deleteLFidx=(nl+nh+1):2:size(Table,1);
+        if Methodidx==6 || Methodidx==7
+            TrueSSE_Xhats_Budget(1:Budget1,Methodidx,Trainidx) = interp1(Budget_iter,SSETrue_Xhats_iter,1:Budget1);
+            L2s_Xhats_Budget(1:Budget1,Methodidx,Trainidx)=interp1(Budget_iter,L2s_iter,1:Budget1);
+        elseif Methodidx<=4
+            TrueSSE_Xhats_Budget(1:Budget,Methodidx,Trainidx) = interp1(Budget_iter,SSETrue_Xhats_iter,1:Budget);
+            L2s_Xhats_Budget(1:Budget,Methodidx,Trainidx)=interp1(Budget_iter,L2s_iter,1:Budget);
+        elseif Methodidx==5
+            deleteLFidx=(nl+nh+1):2:30;
             Budget_iter(deleteLFidx,:)=[];
             SSETrue_Xhats_iter(deleteLFidx,:)=[];
             L2s_iter(deleteLFidx,:)=[];
             
-            TrueSSE_Xhats_Budget(:,Methodidx,Trainidx) = interp1(Budget_iter,SSETrue_Xhats_iter,1:(Budget));
-            L2_Budget(:,Methodidx,Trainidx)=interp1(Budget_iter,L2s_iter,1:(Budget));
+            TrueSSE_Xhats_Budget(1:Budget,Methodidx,Trainidx) = interp1(Budget_iter,SSETrue_Xhats_iter,1:Budget);
+            L2s_Xhats_Budget(1:Budget,Methodidx,Trainidx) = interp1(Budget_iter,L2s_iter,1:Budget);
+            
         end
-        
     end
 end
-
-meanTrueSSE_Xhats_Budget_SSEXMLE=mean(TrueSSE_Xhats_Budget,3)-SSE_XMLE;
-meanL2_Budget=mean(L2_Budget,3);
-
+meanTrueSSE_Xhats_Budget=mean(TrueSSE_Xhats_Budget(:,:,:),3);
+meanTrueSSE_Xhats_Budget_SSEXMLE=meanTrueSSE_Xhats_Budget-SSE_XMLE;
+meanL2s_Xhats_Budget=mean(L2s_Xhats_Budget,3);
 
 idx1=1;
 for idx2=1:7
-    [ ~, ttest_p_Sh(idx2,1)]=ttest(DiffSSETrue_XhatsEnd(:,idx1),DiffSSETrue_XhatsEnd(:,idx2));
-    [ ~, ttest_p_L2(idx2,1)]=ttest(L2End(:,idx1),L2End(:,idx2));
+        [ ~, ttest_p_Sh(idx2,1)]=ttest(SSETrue_XhatsEnd(:,idx1),SSETrue_XhatsEnd(:,idx2));
+        [ ~, ttest_p_L2(idx2,1)]=ttest(L2End(:,idx1),L2End(:,idx2));
 end
-Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs ID-AGP ','(i) vs SR-AGP ' ' (i) vs Nested' ,' (i) vs BC-GP',' (i) vs SR-GP'}';
+Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs MID-AGP ','(i) vs SR-AGP ' ' (i) vs Nested' ,' (i) vs BC-GP',' (i) vs SR-GP'}';
 
-Table2 =table(Labels,mean(DiffSSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)
+Table2 =table(Labels1,mean(SSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)
 
-
-Labels={'MBC-AGP            ','    BC-AGP           ','       MID-AGP         ', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
-
-%Figure 3
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure(3),clf
+%Figure 6
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+htmlGray = [128 128 128]/255;
+htmlGreen =[0.4660 0.6740 0.1880];
+figure(6),clf
 subplot(121)
-boxplot( DiffSSETrue_XhatsEnd,'Labels',Labels)
-bp= gca;bp.FontSize=20;
-bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=21;
-bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
-hold on
-ylim([0.00005,60])
-set(gca,'YScale','log')
-ylabel('$S_h(\hat{\textbf{x}}^*_{\mathbf{ML}})-0.093939$','FontWeight','bold','Interpreter','latex','FontSize',28);
-set(findobj(gca,'type','line'),'linew',2)
-title('(a)','FontSize',25,'FontWeight','bold')
-set(gca,'Position',[0.07 0.12 0.42 0.8])
-set(gca,'yGrid','on','GridLineStyle','--')
-bp.GridLineStyle='--';
-yticks([  10.^[-4:4]   ])
-yticks([  10.^[-4:1]   50])
-yticklabels({'10^{-4}','10^{-3}','10^{-2}', '10^{-1}','10^{0}','10^{1}'  '50'})
- set(gca,'TickLabelInterpreter', 'tex');
+FontSize6=28;
+linewidth=0.1*30;
+MarkerSize1=15;
+plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,1),'ko-','linewidth',linewidth+1,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget:6:Budget Budget]),hold on
+plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,2),'b:o','linewidth',linewidth+1,'MarkerSize',MarkerSize1,'MarkerFaceColor','b','MarkerIndices',[(InitialBudget+3):6:Budget Budget])
+plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,3),'k^-','linewidth',linewidth+1,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget+2:3:Budget Budget]),hold on
+plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,4),'--v','linewidth',linewidth+1,'Color', htmlGray,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget+2:3:Budget Budget])
+plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,5),':s','linewidth',linewidth+1,'color',htmlGreen,'MarkerFaceColor',htmlGreen,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget (InitialBudget):4:Budget Budget ])
+plot(1:Budget1,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget1,6),'b-x','linewidth',linewidth+1,'MarkerSize',MarkerSize1+10,'MarkerIndices',[InitialBudget (InitialBudget+2):4:Budget1 Budget1]),hold on
+plot(1:Budget1,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget1,7),'--s','linewidth',linewidth+1,'Color', htmlGray,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget InitialBudget+1:4:Budget1 Budget1])
+xlim([InitialBudget,Budget1])
+xlabel('Computational cost','FontWeight','normal')
+ylabel('Average  $S_h(\hat{\textbf{x}}^*_{\mathbf{ML}})$-3.526493  {   }','Interpreter','latex');
+leg = legend(Labels,'NumColumns',3,'Location','northeast','fontsize',20);
+leg.ItemTokenSize = [73,50];
+set(gca,'YScale','log','FontSize',FontSize6,'FontWeight','Bold', 'LineWidth', 3);
+yticks([.0625 0.125 0.25 0.5 1 2 4 8 ])
+ylim([0.05 11])
+set(gca,'Position',[0.1 0.2 0.41 0.71])
+title('(a)','FontSize',25,'FontWeight','Bold')
+xticks([48:2:62 64])
+xlim([47.9 64.2])
 
 subplot(122)
-boxplot( L2End,'Labels',Labels)
-set(gca,'Position',[0.575 0.12 0.42 0.8])
-set(findobj(gca,'type','line'),'linew',2)
-bp= gca;bp.FontSize=20;
-bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=21;
-bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
-ylabel('$L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex','FontSize',28);
-set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 2);
-title('(b)','FontSize',25,'FontWeight','bold')
-set(gcf,'position'  ,[          0         386        1920         510])
-set(gca,'yGrid','on','GridLineStyle','--')
-bp.GridLineStyle='--';
-ylim([   0.0002    0.6])
-set(gca,'YScale','log')
-yticks([ 0.0003  10.^[-3:-1] 0.5  ]  )
-yticklabels({'3\times10^{-4}' ,'10^{-3}','10^{-2}','10^{-1}' '0.5'})
- set(gca,'TickLabelInterpreter', 'tex');
-
-
- %Figure 4
-%%%%%%%%%%%%%%%%%%%
-FontSize=24;
-Labels={'MBC-AGP','BC-AGP','MID-AGP', 'SR-AGP' , 'Nested' ,'BC-GP','SR-GP'}';
-figure(4),clf
-tiledlayout(1,2,'Padding','none','TileSpacing','none');
-nexttile
-htmlGray = [128 128 128]/255;
-htmlGreen = [0.4660 0.6740 0.1880];
-
-MarkerSize=15;
-linewidth=4;
-plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,1),'ko-','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:3:Budget Budget]),hold on
-plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,2),'b:o','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerFaceColor','b','MarkerIndices',[InitialBudget (InitialBudget+2):2:Budget Budget]),
-plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,3),'k^-','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget):3:Budget Budget])
-plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,4),'--v','linewidth',linewidth,'Color', htmlGray,'MarkerSize',MarkerSize,'MarkerIndices',[(InitialBudget+1):2:Budget Budget]),hold on
-plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,5),':s','linewidth',linewidth,'color',htmlGreen,'MarkerFaceColor',htmlGreen,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:4:Budget ])
-plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,6),'b-x','linewidth',linewidth,'MarkerSize',MarkerSize+10,'MarkerIndices',[InitialBudget (InitialBudget+1):3:Budget Budget])
-plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,7),'--s','linewidth',linewidth,'Color', htmlGray,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget+2):3:Budget Budget ]),hold on
-ylim([0.25 150])
-set(gca,'FontWeight','bold','FontSize',FontSize,'YScale','log')
-xlim([InitialBudget,Budget])
+plot(1:Budget,meanL2s_Xhats_Budget(1:Budget,1),'ko-','linewidth',linewidth+1,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget:6:Budget Budget]),hold on
+plot(1:Budget,meanL2s_Xhats_Budget(1:Budget,2),'b:o','linewidth',linewidth+1,'MarkerSize',MarkerSize1,'MarkerFaceColor','b','MarkerIndices',[(InitialBudget+3):6:Budget Budget])
+plot(1:Budget,meanL2s_Xhats_Budget(1:Budget,3),'k^-','linewidth',linewidth+1,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget+2:3:Budget Budget]),hold on
+plot(1:Budget,meanL2s_Xhats_Budget(1:Budget,4),'--v','linewidth',linewidth+1,'Color', htmlGray,'MarkerSize',MarkerSize1,'MarkerIndices',[(InitialBudget+2):3:Budget Budget])
+plot(1:Budget,meanL2s_Xhats_Budget(1:Budget,5),'g:s','linewidth',linewidth+1,'color',htmlGreen,'MarkerFaceColor',htmlGreen,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget (InitialBudget):4:Budget Budget ])
+plot(1:Budget1,meanL2s_Xhats_Budget(1:Budget1,6),'b-x','linewidth',linewidth+1,'MarkerSize',MarkerSize1+10,'MarkerIndices',[InitialBudget (InitialBudget):3:Budget1 Budget1]),hold on
+plot(1:Budget1,meanL2s_Xhats_Budget(1:Budget1,7),'--s','linewidth',linewidth+1,'Color', htmlGray,'MarkerSize',MarkerSize1,'MarkerIndices',[InitialBudget InitialBudget+1:4:Budget1 Budget1])
+xlim([InitialBudget,Budget+1])
 xlabel('Computational cost','FontWeight','normal')
-ylabel('Average  $S_h(\hat{\textbf{x}}^*_{\mathbf{ML}})-0.093939$','Interpreter','latex','FontSize',32);
-leg = legend(Labels,'NumColumns',3,'Location','northeast');
-leg.ItemTokenSize = [74,50];
-title('(a)','FontWeight','bold')
-yticks([0.3 10.^[0:2] ])
-yticklabels({'0.3 ', '10^0 ','10^1 ','10^2 '})
- set(gca,'TickLabelInterpreter', 'tex');
- 
-nexttile
-plot(1:Budget,meanL2_Budget(1:Budget,1),'ko-','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:3:Budget Budget]),hold on
-plot(1:Budget,meanL2_Budget(1:Budget,2),'b:o','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerFaceColor','b','MarkerIndices',[InitialBudget (InitialBudget):2:Budget Budget]),
-plot(1:Budget,meanL2_Budget(1:Budget,3),'k^-','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget):3:Budget Budget])
-plot(1:Budget,meanL2_Budget(1:Budget,4),'--v','linewidth',linewidth,'Color', htmlGray,'MarkerSize',MarkerSize,'MarkerIndices',[(InitialBudget+1):2:Budget Budget]),hold on
-plot(1:Budget,meanL2_Budget(1:Budget,5),':s','linewidth',linewidth,'color',htmlGreen,'MarkerFaceColor',htmlGreen,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget:4:Budget Budget])
-plot(1:Budget,meanL2_Budget(1:Budget,6),'b-x','linewidth',linewidth,'MarkerSize',MarkerSize+10,'MarkerIndices',[InitialBudget (InitialBudget+1):3:Budget Budget])
-plot(1:Budget,meanL2_Budget(1:Budget,7),'--s','linewidth',linewidth,'Color', htmlGray,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget+2):3:Budget Budget ]),hold on
-xlim([InitialBudget,Budget])
-ylim([0.019    0.5])
-
-xlabel('Computational cost','FontWeight','normal')
-title('(b)','FontWeight','bold')
-set(gca,'FontWeight','bold','FontSize',FontSize)
-ylabel('Average  $L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex','FontSize',32);
-leg = legend(Labels,'NumColumns',3,'Location','northeast');
-leg.ItemTokenSize = [74,50];
-set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3);
-set(gca,'YScale','log')
-yticks(0.01*2.^[1:5])
-yticklabels({'0.02 ','0.04 ','0.08 ','0.16 ','0.32 '})
-set(gcf,'Position',[          0         0        1920         626])
+ylabel('Average  $L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex');  
+yticks([0.2 0.3:0.1:1.2 ] )
+leg = legend(Labels,'NumColumns',3,'Location','northeast','fontsize',20);
+leg.ItemTokenSize = [73,45];
+set(gca,'Position',[0.583 0.2 0.41 0.71])
+title('(b)','FontSize',24,'FontWeight','Bold')
+ylim([0.19  0.8])
+set(findobj(gcf,'type','axes'),'FontSize',FontSize6,'FontWeight','Bold', 'LineWidth', 3);
 set(gcf,'Position',[          0         100        1920         615])
+xticks([48:2:62 64])
+xlim([47.9 64.2])
 
-
-%Figure 5
-%%%%%%%%%%%%%%%%%%%%%%%%
-figure(5),clf
+%Figure 7
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+figure(7),clf
 Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};
 boxplot( phiEnd(:,[1 2 6]), 'Labels',Labels2Method,'OutlierSize',10,'Widths',0.8*[1 1 1  ])
 set(findobj(gca,'type','line'),'linew',2)
 set(findobj(gcf,'type','axes'),'FontSize',27,'FontWeight','Bold', 'LineWidth', 2);
 ylabel('$ \hat \varphi$','Interpreter','latex','FontSize',50,'Rotation',0,'HorizontalAlignment','right','VerticalAlignment','baseline')
-set(gca,'Position',[    0.2    0.14    0.78    0.83])
+set(gca,'Position',[    0.2    0.15    0.78    0.83])
 set(gcf,'Position',[           409   559   900   410])
 set(gcf,'Position',[           409   559   900   334])
 set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3);
 yticks([-0.1:0.1:0.6])
 set(gca,'yGrid','on','GridLineStyle','--')
-ylim([-0.17 0.64])
+ylim([-0.17 0.67])
 set(gcf,'Position',[           109   159   900   372])
 medians=median(phiEnd(:,[1 2 6]));
-FontSize77=20;
-text(1,1.11*medians(1),['Median=' num2str(medians(1),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
-text(2,1.1*medians(2),['Median=' num2str(medians(2),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
-text(3,1.14*medians(3),['Median=' num2str(medians(3),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
+FontSize77=21;
+text(1,1.15*medians(1),['Median=' num2str(medians(1),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
+text(2,1.091*medians(2),['Median=' num2str(medians(2),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
+text(3,1.2*medians(3),['Median=' num2str(medians(3),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
 xlim([0.45 3.55])
 
 
-%Figure E.1
-%%%%%%%%%%%%%%%%%%%%%%
-Trainidx=45;
-figure(100);clf
-tiledlayout(2,8,'Padding','none','TileSpacing','none');
-pd1=1;
-pd2=2;
-Fontsize=21;
-linewidth=1;
-for Methodidx =1:5
-    if Methodidx ==5
-        nexttile([1 1])
-        axis off
-
-        nexttile([1 2])
-    else
+%Figure F.1
+%%%%%%%%%%%%%%%%
+Trainidx=12;
+aaa=[1 2 ; 1 3;2 3;];
+for Methodidx =1:2
+    Data=RecordDataShow{Trainidx,Methodidx};
+    Table=RecordTableShow{Trainidx,Methodidx};
+    XhatsEnd=Table.Xhats(end,:);
+    SSEEnd=Table.SSETrue_Xhats(end,:)
+    InitialDh=Data.Dh(1:nh,:);
+    InitialDl=Data.Dl(1:nl,:);
+    FollowDh=Data.Dh(nh+1:end,:);
+    FollowDl=Data.Dl(nl+1:end,:);
+    
+    figure(7+Methodidx),clf
+    tiledlayout(1,3,'Padding','none','TileSpacing','none');
+    
+    for kd=1:3
+        pd1=aaa(kd,1);
+        pd2=aaa(kd,2);
+        nexttile
+        markersize=15;
+        linewidth=1.5;
+        plot(InitialDh(:,pd1),InitialDh(:,pd2),'bs','linewidth',linewidth,'markersize',markersize)
+        hold on
+        plot(InitialDl(:,pd1),InitialDl(:,pd2),'bx','linewidth',linewidth,'markersize',markersize)
         
-    nexttile([1 2])
+        plot(FollowDh(:,pd1),FollowDh(:,pd2),'ko','linewidth',linewidth,'markersize',markersize)
+        hold on
+        plot(FollowDl(:,pd1),FollowDl(:,pd2),'k+','linewidth',linewidth,'markersize',markersize)
+        
+        plot(XMLE(:,pd1),XMLE(:,pd2),'kp','MarkerSize',25,'linewidth',linewidth)
+        plot(XhatsEnd(:,pd1),XhatsEnd(:,pd2),'k^','MarkerSize',25,'linewidth',linewidth)
+        
+        xlabel(['x_' num2str(pd1)])
+        ylabel(['x_' num2str(pd2)],'Rotation',0,'HorizontalAlignment','right')
+
+        xticks([0:0.2:1]);
+        yticks([0:0.2:1])
+
+        lim0=0.02;
+        xlim( [-lim0 1+lim0])
+        ylim( [-lim0 1+lim0])
+                         
+        if kd==1
+           xticklabels({'0.12 '  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
+            yticklabels({'0.0004'      ,'0.00052'      ,'0.00064'      ,'0.00076'      ,'0.00088'         ,'0.001 '})
+           
+        end
+        
+        if kd==2 
+           xticklabels({'0.12 '  ,      '0.156'  ,      '0.192' ,       '0.228'  ,      '0.264'         , '0.3'})
+            yticklabels({'0'   ,       '0.195'  ,        '0.39'  ,        '0.585'  ,        '0.78'   ,      '0.975'}            )
+        end
+        
+        if kd==3
+            xticklabels({'.0004   '      ,' .00052    '      ,'  .00064   '      ,'    .00076  '      ,'    .00088'         ,'   .001'})
+            yticklabels({'0'   ,       '0.195'  ,        '0.39'  ,        '0.585'  ,        '0.78'   ,      '0.975'}            )
+        end
+        
     end
     
-    Table=BORecordTable{Trainidx,Methodidx};
-    XhatsEnd=Table.Xhats(end,:);
-    Level=Table.Level;
+    set(findobj(gcf,'type','axes'),'FontSize',17,'FontWeight','Bold', 'LineWidth', 1);
+    if Methodidx==1
+        sgtitle('(a) MBC-AGP','fontsize',25,'FontWeight','Bold')
+        set(gcf,'Position' , [         0         450        1600         350])        
+    else
+        sgtitle('(b) BC-AGP','fontsize',25,'FontWeight','Bold')
+
+        set(gcf,'Position' , [         0         0        1600         350])
+        
+    end
     
-    Dh=Table.D(Level==2,:);
-    Dl=Table.D(Level==1,:);
-    
-    
-    InitialDh=Dh(1:nh,:);
-    InitialDl=Dl(1:nl,:);
-    FollowDh=Dh(nh+1:end,:);
-    FollowDl=Dl(nl+1:end,:);
-    
-    plot(InitialDh(:,pd1),InitialDh(:,pd2),'bs','linewidth',linewidth,'markersize',15)
-    hold on
-    plot(InitialDl(:,pd1),InitialDl(:,pd2),'bx','linewidth',linewidth,'markersize',15)
-    
-    plot(FollowDh(:,pd1),FollowDh(:,pd2),'ko','linewidth',linewidth,'markersize',15)
-    hold on
-    plot(FollowDl(:,pd1),FollowDl(:,pd2),'k+','linewidth',linewidth,'markersize',15)
-    
-    
-    xlabel('x_1','FontSize',Fontsize)
-    ylabel('x_2','FontSize',Fontsize,'Rotation',0,'HorizontalAlignment','right')
-    xticks([0:0.2:1])
-    yticks([0:0.2:1])
-    
-    xygird0=0.03;
-    xlim([-xygird0 1+xygird0])
-    ylim([-xygird0 1+xygird0])
-    
-    plot(XhatsEnd(:,pd1),XhatsEnd(:,pd2),'k^','MarkerSize',25)
-    hold on
-    plot(XMLE(:,pd1),XMLE(:,pd2),'kp','MarkerSize',25)
-    
-    title(Labels(Methodidx),'FontWeight','Bold')
 end
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-for Methodidx =6:7
-    
-    Table=BORecordTable{Trainidx,Methodidx};
-    XhatsEnd=Table.Xhats(end,:);
-    
-    Dh=Table.D;
-    InitialDh=Dh(1:nh0,:);
-    FollowDh=Dh(nh0+1:end,:);
-    
-    nexttile([1 2])
-    
-    pd1=1;
-    pd2=2;
-    
-    plot(XMLE(:,pd1),XMLE(:,pd2),'kp','MarkerSize',25)
-    hold on
-    plot(XhatsEnd(:,pd1),XhatsEnd(:,pd2),'k^','MarkerSize',25)
-    
-    
-    plot(InitialDh(:,pd1),InitialDh(:,pd2),'bs','linewidth',linewidth,'markersize',15)
-    hold on
-    plot(FollowDh(:,pd1),FollowDh(:,pd2),'ko','linewidth',linewidth,'markersize',15)
-    
-    xlabel('x_1','FontSize',Fontsize)
-    ylabel('x_2','FontSize',Fontsize,'Rotation',0,'HorizontalAlignment','right')
-    
-    xticks([0:0.2:1])
-    yticks([0:0.2:1])
-    
-    xygird0=0.03;
-    xlim([-xygird0 1+xygird0])
-    ylim([-xygird0 1+xygird0])
-    
-    title(Labels(Methodidx),'FontWeight','Bold')
+idxTrial=68;
+
+for idxMethod=1:7
+    Table=RecordTableShow{idxTrial,idxMethod};
+    Yh_Xhat(idxMethod,:)=RecordDataShow{idxTrial,idxMethod}.Yh_Xhats(end,:);
+    SSET_End(idxMethod,1)=Table.SSETrue_Xhats(end,:);
 end
-set(findobj(gcf,'type','axes'),'FontSize',21,'FontWeight','Bold', 'LineWidth', 1);
-set(gcf,'Position',[          0         0        1600         700])
+
+linewidth=3;
+MarkerSize1=15;
+
+
+%Figure F.2
+%%%%%%%%%%%%%%%%%%%%
+Labels1={'MBC-AGP','BC-AGP','MID-AGP','SR-AGP', 'Nested','Field data'};
+html1=[0.3010 0.7450 0.9330];
+figure(10),clf
+for kd=1:2
+    subplot(1,2,kd)
+    
+    kdidx=(kd-1)*11+[1:11];
+    plot(Yh_Xhat(1,kdidx),'k:','linewidth',linewidth+3,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
+    hold on
+    plot(Yh_Xhat(2,kdidx),':v','linewidth',linewidth,'color','m','MarkerSize',MarkerSize1,'MarkerIndices',[1:2:11])
+    plot(Yh_Xhat(3,kdidx),':o','color','r', 'linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[1:2:11 11]),
+    plot(Yh_Xhat(4,kdidx),'--bs','linewidth',linewidth,'MarkerSize',MarkerSize1,'MarkerIndices',[2:2:11])
+    plot(Yh_Xhat(5,kdidx),'--d','color',html1,'linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[2:2:11 11]),
+    plot(PhysData(kdidx),'-p','color',htmlGreen	, 'linewidth',linewidth,'MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
+    xticks(1:11)
+    
+    if kd==1
+        ylim([20.8 24.6])
+        title('(a)','FontWeight','bold')
+        set(gca,'Position',[0.065 0.215 0.425 0.745])
+    else
+        ylim([21.4 24.6])
+        title('(b)','FontWeight','bold')
+        set(gca,'Position',[0.56 0.215 0.425 0.745])
+    end
+    
+    set(findobj(gca,'type','axes'), 'FontWeight','Bold', 'LineWidth', 2);
+    bp= gca;bp.FontSize=20;
+    bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=20;
+    bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
+    
+    row1 = {'12:01 a.m.','2:01 a.m. ','4:01 a.m.','6:01 a.m.','8:01 a.m.','  10:01 a.m.','12:01 p.m.','2:01 p.m.','4:01 p.m.','6:01 p.m.','8:01 p.m.'};
+    row2 = {'to 2:00 a.m.' 'to 4:00 a.m.' 'to 6:00 a.m.' 'to 8:00 a.m.' 'to 10:00 a.m.' 'to 12:00 p.m.','to 2:00 p.m.','to 4:00 p.m.','to 6:00 p.m.','to 8:00 p.m.','to 10:00 p.m.'};
+    labelArray = [row1; row2;];
+    tickLabels = strtrim(sprintf('%s\\newline%s\n', labelArray{:}));
+    bp.XTickLabel = tickLabels;
+    bp.XTickLabelRotation=90;
+    
+    xlabel('Time interval','FontWeight','bold','FontSize',20)
+    
+    xlim([0.8 11.2])
+    ylabel('Temperature (Celsius)','FontWeight','bold')
+    leg = legend(Labels1,'NumColumns',2);
+    leg.ItemTokenSize = [70,50];
+    set(gcf,'Position' , [         0         59        1800         963])
+end
+
+
+Labels2={'MBC-AGP','BC-GP','SR-GP','Field data'};
+%Figure F.3
+figure(11),clf
+for kd=1:2
+    subplot(1,2,kd)
+    
+    kdidx=(kd-1)*11+[1:11];
+    plot(Yh_Xhat(1,kdidx),'k:','linewidth',linewidth+3,'MarkerFaceColor','none','MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
+    hold on
+    plot(Yh_Xhat(6,kdidx),'h:b','linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize1+7,'MarkerIndices',[3:3:11]),
+    plot(Yh_Xhat(7,kdidx),'--r>','linewidth',linewidth,'MarkerSize',MarkerSize1,'MarkerIndices',[1:3:11 11]),
+    plot(PhysData(kdidx),'-p','color',htmlGreen	, 'linewidth',linewidth,'MarkerSize',MarkerSize1,'MarkerIndices',[1:1:11])
+    xticks(1:11)
+    
+    if kd==1
+        ylim([20.8 24.6])
+        title('(a)','FontWeight','bold')
+        set(gca,'Position',[0.065 0.255 0.425 0.695])
+    else
+        ylim([21.4 24.6])
+        title('(b)','FontWeight','bold')
+        set(gca,'Position',[0.56 0.255 0.425 0.695])
+        
+    end
+    
+    set(findobj(gca,'type','axes'), 'FontWeight','Bold', 'LineWidth', 2);
+    bp= gca;bp.FontSize=20;
+    bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=20;
+    bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
+    
+    row1 = {'12:01 a.m.','2:01 a.m. ','4:01 a.m.','6:01 a.m.','8:01 a.m.','  10:01 a.m.','12:01 p.m.','2:01 p.m.','4:01 p.m.','6:01 p.m.','8:01 p.m.'};
+    row2 = {'to 2:00 a.m.' 'to 4:00 a.m.' 'to 6:00 a.m.' 'to 8:00 a.m.' 'to 10:00 a.m.' 'to 12:00 p.m.','to 2:00 p.m.','to 4:00 p.m.','to 6:00 p.m.','to 8:00 p.m.','to 10:00 p.m.'};
+    labelArray = [row1; row2;];
+    tickLabels = strtrim(sprintf('%s\\newline%s\n', labelArray{:}));
+    bp.XTickLabel = tickLabels;
+    bp.XTickLabelRotation=90;
+    
+    xlabel('Time interval','FontWeight','bold','FontSize',20)
+    
+    xlim([0.8 11.2])
+    ylabel('Temperature (Celsius)','FontWeight','bold')
+    leg = legend(Labels2,'NumColumns',2);
+    leg.ItemTokenSize = [70,50];
+    set(gcf,'Position' , [         0         59        1800         800])
+end

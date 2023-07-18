@@ -35,7 +35,7 @@ if ZMLFSSEorZLFSSE==1
         Yhkd=SameYh(:,kd);
         MatrixX=[Ones2,Ylkd];
         if Case==1
-            if all(Ylkd<10^(-12)) %only for example 1
+            if all(Ylkd<10^(-12)) %only for example 2
                 ai_bi(:,kd)=[0,1];
                 Sum_ErrorYlYh0=sum(abs(Yhkd-Ylkd)) ;
                 if Sum_ErrorYlYh0>0

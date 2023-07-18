@@ -1,4 +1,4 @@
-function [Dl,Dh]=GenerateNestedLHD(nl,nh,Dim,nsim)
+function [Dl,Dh]=GenerateNestedLHD(nl,nh,Dim,nsim) 
 
 t=nl/nh;
 if(round(t)~=t)
