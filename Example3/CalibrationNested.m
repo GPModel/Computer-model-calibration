@@ -157,10 +157,10 @@ lb=[(0.25)*ones(1,Dim) ];
 ub=[(15)*ones(1,Dim ) ];
 nvar=numel(lb) ;
 Objl=@(Parl) Fun_NegLogLikehoodLF(Dl,Respl,Parl,nugget);
-options=optimoptions('patternsearch','disp','off','MaxFunctionEvaluations',7000*nvar,'MaxIterations',100*nvar);
+options=optimoptions('patternsearch','disp','off','MaxFunctionEvaluations',2000*nvar,'MaxIterations',100*nvar);
 
 Sobolset=sobolset(nvar,'Skip',1e3,'Leap',1e2);
-StardardPoints=[net(Sobolset,9000*nvar);];
+StardardPoints=[net(Sobolset,7000*nvar);];
 
 SIZE=size(StardardPoints,1);
 fvals=zeros(SIZE,1);
@@ -229,7 +229,7 @@ options=optimoptions('patternsearch','disp','off','MaxFunctionEvaluations',2000*
 Objh= @(Parh) Fun_NegLogLikehoodHF(Dh,Resph,Dl,Respl,Parh,nugget);
 
 Sobolset=sobolset(nvar,'Skip',1e3,'Leap',1e2);
-StardardPoints=[net(Sobolset,9000*nvar)];
+StardardPoints=[net(Sobolset,7000*nvar)];
 
 SIZE=size(StardardPoints,1);
 fvals=zeros(SIZE,1);

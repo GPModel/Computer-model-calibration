@@ -95,7 +95,7 @@ Sh=sum( [Yh-PhysData].^2,2);
 clear AaGrid
 Ones=ones(nh,1);
 for kd=1:numel(PhysData)
-    if all(Yl(:,kd)<10^(-12)) %only for example 2
+    if all(Yl(:,kd)<10^(-12)) %only for example 3
         AaGrid(:,kd)=[0,1];
         Sum_ErrorYlYh0=sum(abs(Yh(:,kd)-Yl(:,kd))) ;
         if Sum_ErrorYlYh0>0
@@ -371,22 +371,8 @@ xlim([0.45 3.55])
 Labels={'MBC-AGP','BC-AGP','MID-AGP', 'SR-AGP' ,  'Nested' ,'SVD-AGP','BC-GP','SR-GP','SVD'}';
 
 %Figure D.5
-%%%%%%%%%%%%%%%%%%%%%%
-% % %99%
-% Trainidx=3;
-Trainidx=80
-Trainidx=82
 Trainidx=88%This
 
-
-
-
-% Trainidx=45;%99.9%
-%  Trainidx=55;
-%  Trainidx=86;%99.9%%This one
-% Trainidx=88;%99.9%
-% Trainidx=97;%99.9%
-% Trainidx=100;%99.9%
 figure(12);clf
 tiledlayout(2,10,'Padding','none','TileSpacing','none');
 pd1=1;

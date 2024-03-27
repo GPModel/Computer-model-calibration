@@ -10,7 +10,7 @@ InitialBudget=nl*1+nh*RatioCost
 InitialBudget0=nh0*RatioCost
 Budget=InitialBudget0+20
 Budget1=Budget
-XTrue=rand(1,Dim)
+XTrue=[  0.8535    0.1333    0.4258]%rand(1,Dim)
 tic,[yh_XTrue]= Simulator(XTrue,2,Case);toc
 std_error=(var(yh_XTrue)*0.0001)^0.5;
 PhysData=yh_XTrue+normrnd(0,std_error,size(yh_XTrue));
@@ -138,7 +138,7 @@ for idx2=1:9
 end
 Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs ID-AGP ','(i) vs SR-AGP ' ' (i) vs Nested' ,'(i) vs SVD-AGP',' (i) vs BC-GP',' (i) vs SR-GP', '(i) vs SVD'}';
 
-Table3 =table(Labels,mean(DiffSSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)
+TableHHH =table(Labels,mean(DiffSSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)
 
 
 FontSize=24;

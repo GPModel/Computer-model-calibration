@@ -95,7 +95,7 @@ Sh=sum( [Yh-PhysData].^2,2);
 clear AaGrid
 Ones=ones(nh,1);
 for kd=1:numel(PhysData)
-    if all(Yl(:,kd)<10^(-12)) %only for example 2
+    if all(Yl(:,kd)<10^(-12)) %only for example 3
         AaGrid(:,kd)=[0,1];
         Sum_ErrorYlYh0=sum(abs(Yh(:,kd)-Yl(:,kd))) ;
         if Sum_ErrorYlYh0>0
@@ -245,47 +245,7 @@ for idx2=1:9
 end
 Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs ID-AGP ','(i) vs SR-AGP ' ' (i) vs Nested' ,'(i) vs SVD-AGP',' (i) vs BC-GP',' (i) vs SR-GP', '(i) vs SVD'}';
 
-Example2Table =table(Labels,mean(SSETrue_XhatsEnd)'-SSE_XMLE,ttest_p_Sh,mean(L2End)',ttest_p_L2)
-%%
-Labels={'MBC-AGP              ','  BC-AGP         ','     MID-AGP       ', '    SR-AGP   ' ,  '   Nested   ' ,'   SVD-AGP','       BC-GP','       SR-GP','       SVD'}';
-figure(9),clf
-subplot(121)
-boxplot(DiffSSETrue_XhatsEnd,'Labels',Labels)
-bp= gca;bp.FontSize=20;
-bpXAxisFontSize=17;
-bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=bpXAxisFontSize;
-bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
-hold on
-ylim([0.00008,100])
-set(gca,'YScale','log')
-ylabel('$S_h(\hat{\textbf{x}}^*_{\mathbf{ML}})-0.093939$','FontWeight','bold','Interpreter','latex','FontSize',28);
-set(findobj(gca,'type','line'),'linew',2)
-title('(a)','FontSize',25,'FontWeight','bold')
-set(gca,'Position',[0.07 0.12 0.42 0.8])
-set(gca,'yGrid','on','GridLineStyle','--')
-bp.GridLineStyle='--';
-yticks([  10.^[-4:1]   50])
-yticklabels({'10^{-4}','10^{-3}','10^{-2}', '10^{-1}','10^{0}','10^{1}'  '50'})
- set(gca,'TickLabelInterpreter', 'tex');
-
-subplot(122)
-boxplot( L2End,'Labels',Labels)
-set(gca,'Position',[0.575 0.12 0.42 0.8])
-set(findobj(gca,'type','line'),'linew',2)
-bp= gca;bp.FontSize=20;
-bp.XAxis.FontWeight='bold';bp.XAxis.FontSize=bpXAxisFontSize;
-bp.YAxis.FontWeight='bold';bp.YAxis.FontSize=23;
-ylabel('$L_2(\hat{\textbf{x}}^*_{\mathbf{ML}})$','Interpreter','latex','FontSize',28);
-set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 2);
-title('(b)','FontSize',25,'FontWeight','bold')
-set(gcf,'position'  ,[          0         386        1920         510])
-set(gca,'yGrid','on','GridLineStyle','--')
-bp.GridLineStyle='--';
-ylim([   0.00045    0.6])
-set(gca,'YScale','log')
-yticks([ 0.0005  10.^[-3:-1] 0.5  ]  )
-yticklabels({'5\times10^{-4}' ,'10^{-3}','10^{-2}','10^{-1}' '0.5'})
- set(gca,'TickLabelInterpreter', 'tex');
+Example3Table =table(Labels,mean(SSETrue_XhatsEnd)'-SSE_XMLE,ttest_p_Sh,mean(L2End)',ttest_p_L2)
 
 FontSize=24;
 figure(10),clf
@@ -306,7 +266,7 @@ plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,7),':s','linewidth',line
 plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,8),'--h','linewidth',linewidth,'MarkerFaceColor','none','MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget+1):3:Budget Budget ]),hold on
 plot(1:Budget,meanTrueSSE_Xhats_Budget_SSEXMLE(1:Budget,9),':d','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget+3):3:Budget Budget ]),hold on
 
-ylim([0.25 170])
+ylim([0.5 200])
 set(gca,'FontWeight','bold','FontSize',FontSize,'YScale','log')
 xlim([InitialBudget,Budget])
 xlabel('Computational cost','FontWeight','normal')
@@ -329,7 +289,7 @@ plot(1:Budget,meanL2_Budget(1:Budget,7),':s','linewidth',linewidth,'Color', 'r',
 plot(1:Budget,meanL2_Budget(1:Budget,8),'--h','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget+1):3:Budget Budget ]),hold on
 plot(1:Budget,meanL2_Budget(1:Budget,9),':d','linewidth',linewidth,'MarkerSize',MarkerSize,'MarkerIndices',[InitialBudget (InitialBudget+3):3:Budget Budget ]),hold on
 xlim([InitialBudget,Budget])
-ylim([0.019    0.52])
+ylim([0.019    0.56])
 
 xlabel('Computational cost','FontWeight','normal')
 title('(b)','FontWeight','bold')
@@ -344,139 +304,3 @@ yticklabels({'0.02 ','0.04 ','0.08 ','0.16 ','0.32 '})
 set(gcf,'Position',[          0         0        1920         626])
 set(gcf,'Position',[          0         100        1920         615])
 
-%%
-figure(11),clf
-Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};
-boxplot( phiEnd(:,[1 2 7]), 'Labels',Labels2Method,'OutlierSize',10,'Widths',0.8*[1 1 1  ])
-set(findobj(gca,'type','line'),'linew',2)
-set(findobj(gcf,'type','axes'),'FontSize',27,'FontWeight','Bold', 'LineWidth', 2);
-ylabel('$ \hat \varphi$','Interpreter','latex','FontSize',50,'Rotation',0,'HorizontalAlignment','right','VerticalAlignment','baseline')
-set(gca,'Position',[    0.2    0.14    0.78    0.83])
-set(gcf,'Position',[           409   559   900   410])
-set(gcf,'Position',[           409   559   900   334])
-set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3);
-yticks([-0.2:0.1:0.6])
-set(gca,'yGrid','on','GridLineStyle','--')
-ylim([-0.3 0.62])
-set(gcf,'Position',[           109   159   900   372])
-medians=median(phiEnd(:,[1 2 7]));
-FontSize77=20;
-text(1,1.15*medians(1),['Median=' num2str(medians(1),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
-text(2,1.1*medians(2),['Median=' num2str(medians(2),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
-text(3,1.18*medians(3),['Median=' num2str(medians(3),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
-xlim([0.45 3.55])
-
-%%
-Labels={'MBC-AGP','BC-AGP','MID-AGP', 'SR-AGP' ,  'Nested' ,'SVD-AGP','BC-GP','SR-GP','SVD'}';
-
-% %99%
-Trainidx=10;
-Trainidx=41;
-
-
-Trainidx=41;%99.9%
-
-
-
-
-
-
-
-
-
-
-
-figure(12);clf
-tiledlayout(2,10,'Padding','none','TileSpacing','none');
-pd1=1;
-pd2=2;
-Fontsize=21;
-linewidth=1;
-
-for Methodidx =[1:6]
-    if Methodidx ==6
-        nexttile([1 1])
-        axis off
-
-        nexttile([1 2])
-    else
-        
-    nexttile([1 2])
-    end
-    
-    Table=BORecordTable{Trainidx,Methodidx};
-    XhatsEnd=Table.Xhats(end,:);
-    Level=Table.Level;
-    
-    Dh=Table.D(Level==2,:);
-    Dl=Table.D(Level==1,:);
-    
-    
-    InitialDh=Dh(1:nh,:);
-    InitialDl=Dl(1:nl,:);
-    FollowDh=Dh(nh+1:end,:);
-    FollowDl=Dl(nl+1:end,:);
-    
-    plot(InitialDh(:,pd1),InitialDh(:,pd2),'bs','linewidth',linewidth,'markersize',15)
-    hold on
-    plot(InitialDl(:,pd1),InitialDl(:,pd2),'bx','linewidth',linewidth,'markersize',15)
-    
-    plot(FollowDh(:,pd1),FollowDh(:,pd2),'ko','linewidth',linewidth,'markersize',15)
-    hold on
-    plot(FollowDl(:,pd1),FollowDl(:,pd2),'k+','linewidth',linewidth,'markersize',15)
-    
-    
-    xlabel('x_1','FontSize',Fontsize)
-    ylabel('x_2','FontSize',Fontsize,'Rotation',0,'HorizontalAlignment','right')
-    xticks([0:0.2:1])
-    yticks([0:0.2:1])
-    
-    xygird0=0.03;
-    xlim([-xygird0 1+xygird0])
-    ylim([-xygird0 1+xygird0])
-    
-    plot(XhatsEnd(:,pd1),XhatsEnd(:,pd2),'k^','MarkerSize',25)
-    hold on
-    plot(XMLE(:,pd1),XMLE(:,pd2),'kp','MarkerSize',25)
-    
-    title(Labels(Methodidx),'FontWeight','Bold')
-end
-
-
-for Methodidx =7:9
-    
-    Table=BORecordTable{Trainidx,Methodidx};
-    XhatsEnd=Table.Xhats(end,:);
-    
-    Dh=Table.D;
-    InitialDh=Dh(1:nh0,:);
-    FollowDh=Dh(nh0+1:end,:);
-    
-    nexttile([1 2])
-    
-    pd1=1;
-    pd2=2;
-    
-    plot(XMLE(:,pd1),XMLE(:,pd2),'kp','MarkerSize',25)
-    hold on
-    plot(XhatsEnd(:,pd1),XhatsEnd(:,pd2),'k^','MarkerSize',25)
-    
-    
-    plot(InitialDh(:,pd1),InitialDh(:,pd2),'bs','linewidth',linewidth,'markersize',15)
-    hold on
-    plot(FollowDh(:,pd1),FollowDh(:,pd2),'ko','linewidth',linewidth,'markersize',15)
-    
-    xlabel('x_1','FontSize',Fontsize)
-    ylabel('x_2','FontSize',Fontsize,'Rotation',0,'HorizontalAlignment','right')
-    
-    xticks([0:0.2:1])
-    yticks([0:0.2:1])
-    
-    xygird0=0.03;
-    xlim([-xygird0 1+xygird0])
-    ylim([-xygird0 1+xygird0])
-    
-    title(Labels(Methodidx),'FontWeight','Bold')
-end
-set(findobj(gcf,'type','axes'),'FontSize',21,'FontWeight','Bold', 'LineWidth', 1);
-set(gcf,'Position',[          0         0        1600         700])
