@@ -2,9 +2,9 @@ Requirements:
 Matlab R2020b, Matlab Global Optimization Toolbox, Matlab Statistics and Machine Learning Toolbox, and EnergyPlus 9.4.0;
 
 %%%%%%%%%%%%%%%%%%%%%% Descriptions of folders%%%%%%%%%%%%%%%%%%%%%
-Example 1: gives all codes and data for Example 1 that are summarized and reported in the paper 
-Example 2: gives all codes and data for Example 2 that are summarized and reported in the paper 
-Example 3: gives all codes and data for Example 3 that are summarized and reported in the paper 
+Example1: gives all codes and data for Example 1 that are summarized and reported in the paper 
+Example2: gives all codes and data for Example 2 that are summarized and reported in the paper 
+Example3: gives all codes and data for Example 3 that are summarized and reported in the paper 
 
 %%%%%%%%%%%%%%%%%%%%%% Descriptions of files %%%%%%%%%%%%%%%%%%%%%
 CalibrationAGP.m----------Implements the bi-fidelity MBC-AGP, BC-AGP, MID-AGP or SR-AGP method.
