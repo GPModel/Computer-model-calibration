@@ -1,5 +1,5 @@
 function [Z,SumLogdZ,absdZ]= TransformData(SS,phi,ZNBC) 
-% % % % % phi=0.9;
+
 if ZNBC==0 %Indentity transformation
     Z=SS;   
     dZ=1;%ones(size(SS));

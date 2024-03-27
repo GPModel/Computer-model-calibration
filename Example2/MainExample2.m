@@ -59,10 +59,11 @@ for id =1:NoTrials
     SingleDataInput(id).XTrue=XTrue;
     SingleDataInput(id).PhysData=PhysData;    SingleDataInput(id).RatioCost=RatioCost;
     SingleDataInput(id).Budget=Budget;        SingleDataInput(id).Case=Case;
-    save Example2.mat
+    save Example2Design.mat
 end
 %%
 %Section 2: Bayesian optimization
+load Example2Design.mat
 ZNBC_BC=1;   ZNBC_ID=0;   ZNBC_SR=2;
 ZMLFSSE=1;   ZLFSSE=0;
 ZWError=1;
@@ -77,13 +78,12 @@ for id=1:NoTrials
     [T_BC_GP{id,1},Data_BC_GP{id,1}] =CalibrationBCGP(SingleDataInput(id)); 'BC-GP'
     [T_SR_GP{id,1},Data_SR_GP{id,1}] =CalibrationSRGP(SingleDataInput(id)); 'SR-GP'
     [T_SVD{id,1},Data_SVD{id,1}] =CalibrationSVD(SingleDataInput(id));'SVD'
-    save('Example2.mat')
+    save('Example2Results.mat', 'Data_BC_AGP', 'Data_BC_GP', 'Data_MBC_AGP', 'Data_MID_AGP', 'Data_Nested', 'Data_SR_AGP', 'Data_SR_GP', 'Data_SVD', 'Data_SVDAGP', 'T_BC_AGP', 'T_BC_GP', 'T_MBC_AGP', 'T_MID_AGP', 'T_Nested', 'T_SR_AGP', 'T_SR_GP', 'T_SVD', 'T_SVDAGP','RatioCost','Budget1','Budget','InitialBudget','nl','nh','nh0','PhysData')
 end
 %%
 %Section 3: Show BO results 
 clear,clc
-load Example2.mat
-
+load('Example2Results.mat')
 idx=(1:100);
 Labels={'MBC-AGP','BC-AGP','MID-AGP','SR-AGP', 'Nested','SVD-AGP','BC-GP','SR-GP' ,'SVD'}' ;
 RecordTableShow=[T_MBC_AGP(idx)  T_BC_AGP(idx)   T_MID_AGP(idx)  T_SR_AGP(idx)   T_Nested(idx)  T_SVDAGP(idx) T_BC_GP(idx)  T_SR_GP(idx)              T_SVD(idx)     ];
@@ -222,7 +222,7 @@ text(2,1.091*medians(2),['Median=' num2str(medians(2),2)],'HorizontalAlignment',
 text(3,1.2*medians(3),['Median=' num2str(medians(3),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
 xlim([0.45 3.55])
 
-%%
+
 idxTrain=12;
 aaa=[1 2 ; 1 3;2 3;];
 for idxMethod=1:2
@@ -280,7 +280,7 @@ for idxMethod=1:2
     
 end
 
-%%
+
 idxTrain=68;
 
 

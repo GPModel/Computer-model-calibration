@@ -64,10 +64,11 @@ for id=1:100
     SingleDataInput(id).PhysData=PhysData;    SingleDataInput(id).RatioCost=RatioCost;
     SingleDataInput(id).Budget=Budget1;          SingleDataInput(id).Case=Case;
     
-    save Example1.mat
+    save Example1Design.mat
 end
 
 %%
+load Example1Design.mat
 ZNBC_BC=1;   ZNBC_ID=0;   ZNBC_SR=2;
 ZMLFSSE=1;   ZLFSSE=0;
 for id=1:100
@@ -82,12 +83,12 @@ for id=1:100
     [T_BC_GP{id,1}] =CalibrationBCGP(SingleDataInput(id)); 'BC-GP'
     [T_SR_GP{id,1}] =CalibrationSRGP(SingleDataInput(id)); 'SR-GP'
     [T_SVD{id,1}] =CalibrationSVD(SingleDataInput(id));    'SVD'
-    save('Example1.mat')
+    save('Example1Results.mat', 'T_BC_AGP', 'T_BC_GP', 'T_MBC_AGP', 'T_MID_AGP', 'T_Nested', 'T_SR_AGP', 'T_SR_GP', 'T_SVD', 'T_SVDAGP','SSE_XMLE','XMLE','RatioCost','Budget','nl','nh','nh0','InitialBudget')
 end
 %%
 %Section 3: Show BO results
 clear,format compact,clc;
-load Example1.mat
+load Example1Results.mat
 idx=(1:100);
 BORecordTable=[T_MBC_AGP(idx)  T_BC_AGP(idx)   T_MID_AGP(idx)  T_SR_AGP(idx)   T_Nested(idx) T_SVDAGP(idx)   T_BC_GP(idx)  T_SR_GP(idx)  T_SVD(idx)    ];
 Labels={'MBC-AGP','BC-AGP','MID-AGP','SR-AGP', 'Nested','SVD-AGP', 'BC-GP','SR-GP' ,'SVD'}' ;
@@ -136,7 +137,6 @@ for idx2=1:9
     [ ~, ttest_p_Sh(idx2,1)]=ttest(SSETrue_XhatsEnd(:,idx1),SSETrue_XhatsEnd(:,idx2));
     [ ~, ttest_p_L2(idx2,1)]=ttest(L2End(:,idx1),L2End(:,idx2));
 end
-Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs ID-AGP ','(i) vs SR-AGP ' ' (i) vs Nested' ,'(i) vs SVD-AGP',' (i) vs BC-GP',' (i) vs SR-GP', '(i) vs SVD'}';
 
 TableH1 =table(Labels,mean(DiffSSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)
 
@@ -193,7 +193,7 @@ set(findobj(gcf,'type','axes'),'FontWeight','Bold', 'LineWidth', 3);
  xticks(InitialBudget:4:Budget)
 set(gcf,'Position',[          0         0        1920         626])
 set(gcf,'Position',[          0         100        1920         615])
-%%
+
 figure(11),clf
 Labels2Method={'MBC-AGP','BC-AGP','BC-GP'};
 boxplot( phiEnd(:,[1 2 7]), 'Labels',Labels2Method,'OutlierSize',10,'Widths',0.9*[1 1 1  ])
@@ -215,7 +215,7 @@ text(2,1.035*medians(2),['Median=' num2str(medians(2),2)],'HorizontalAlignment',
 text(3,1.035*medians(3),['Median=' num2str(medians(3),2)],'HorizontalAlignment','center','FontSize',FontSize77,'FontWeight','Bold')
 
 
-%%
+
 idxTrain=19;
 aaa=[1 2 ; 1 3;2 3;];
 for idxMethod=[1 3 6]

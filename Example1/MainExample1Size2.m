@@ -64,10 +64,11 @@ for id=1:100
     SingleDataInput(id).PhysData=PhysData;    SingleDataInput(id).RatioCost=RatioCost;
     SingleDataInput(id).Budget=Budget1;          SingleDataInput(id).Case=Case;
     
-    save Example1Size2.mat
+    save Example1Size2Desing.mat
 end
 
 %%
+load Example1Size2Desing.mat
 ZNBC_BC=1;   ZNBC_ID=0;   ZNBC_SR=2;
 ZMLFSSE=1;   ZLFSSE=0;
 for id=1:100
@@ -82,12 +83,12 @@ for id=1:100
     [T_BC_GP{id,1}] =CalibrationBCGP(SingleDataInput(id)); 'BC-GP'
     [T_SR_GP{id,1}] =CalibrationSRGP(SingleDataInput(id)); 'SR-GP'
     [T_SVD{id,1}] =CalibrationSVD(SingleDataInput(id));    'SVD'
-    save('Example1Size2.mat')
+    save('Example1Size2Results.mat', 'T_BC_AGP', 'T_BC_GP', 'T_MBC_AGP', 'T_MID_AGP', 'T_Nested', 'T_SR_AGP', 'T_SR_GP', 'T_SVD', 'T_SVDAGP','SSE_XMLE','XMLE','RatioCost','Budget','nl','nh','nh0','InitialBudget')
 end
 %%
 %Section 3: Show BO results
 clear,format compact,clc;
-load Example1Size2.mat
+load('Example1Size2Results.mat')
 idx=(1:100);
 BORecordTable=[T_MBC_AGP(idx)  T_BC_AGP(idx)   T_MID_AGP(idx)  T_SR_AGP(idx)   T_Nested(idx) T_SVDAGP(idx)   T_BC_GP(idx)  T_SR_GP(idx)  T_SVD(idx)    ];
 Labels={'MBC-AGP','BC-AGP','MID-AGP','SR-AGP', 'Nested','SVD-AGP', 'BC-GP','SR-GP' ,'SVD'}' ;
@@ -136,7 +137,6 @@ for idx2=1:9
     [ ~, ttest_p_Sh(idx2,1)]=ttest(SSETrue_XhatsEnd(:,idx1),SSETrue_XhatsEnd(:,idx2));
     [ ~, ttest_p_L2(idx2,1)]=ttest(L2End(:,idx1),L2End(:,idx2));
 end
-Labels1={'(i) vs (i) ','(i) vs BC-AGP ','(i) vs ID-AGP ','(i) vs SR-AGP ' ' (i) vs Nested' ,'(i) vs SVD-AGP',' (i) vs BC-GP',' (i) vs SR-GP', '(i) vs SVD'}';
 
 TableHHH =table(Labels,mean(DiffSSETrue_XhatsEnd)',ttest_p_Sh,mean(L2End)',ttest_p_L2)
 
