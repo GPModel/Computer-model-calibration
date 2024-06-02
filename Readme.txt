@@ -2,9 +2,9 @@ Requirements:
 Matlab R2020b, Matlab Global Optimization Toolbox, Matlab Statistics and Machine Learning Toolbox, and EnergyPlus 9.4.0;
 
 %%%%%%%%%%%%%%%%%%%%%% Descriptions of folders%%%%%%%%%%%%%%%%%%%%%
-Example1: gives all codes and data files used to obtain the numerical results for Example 1. The NumericalResults folder in the Example1 folder gives the .mat files containing all the numerical results for Example 1 summarized and reported in the paper.
-Example2: gives all codes and data files used to obtain the numerical results for Example 2. The NumericalResults folder in the Example2 folder gives the .mat files containing all the numerical results for Example 2 summarized and reported in the paper.
-Example3: gives all codes and data files used to obtain the numerical results for Example 3. The NumericalResults folder in the Example3 folder gives the .mat files containing all the numerical results for Example 3 summarized and reported in the paper.
+Example1 gives initial data and all the numerical results for Example 1 summarized and reported in the paper.
+Example2 gives initial data and all the numerical results for Example 2 summarized and reported in the paper.
+Example3 gives initial data and all the numerical results for Example 3 summarized and reported in the paper.
 
 %%%%%%%%%%%%%%%%%%%%%% Descriptions of files %%%%%%%%%%%%%%%%%%%%%
 CalibrationAGP.m----------Implements the bi-fidelity MBC-AGP, BC-AGP, MID-AGP or SR-AGP method.
@@ -20,41 +20,30 @@ EPWeather.epw---------- Includes Hong Kong weather data for use in the EnergyPlu
 GenerateNestedLHD.m----------Generates one pair of nested LHDs using the method described in Qian (2009). Reference: Qian, P. Z. G. (2009). Nested Latin hypercube designs. Biometrika, 96(4), 957–970.
 invandlogdet.m----------Gives the inverse and log determinant of a positive definite matrix.
 MainExample1.m----------Replicates the simulations and gives all results for Example 1.
-MainExample1Size2.m----------Replicates the simulations and gives all results for Example 1, larger design size.
+MainExample1Size2.m ----------Replicates the simulations and gives all results for Example 1, larger design size.
 MainExample2.m----------Replicates the simulations and gives all results for Example 2.
-MainExample2Size2.m ----------Replicates the simulations and gives all results for Example 2, larger design size.
+MainExample2Size2.m----------Replicates the simulations and gives all results for Example 2, larger design size.
 MainExample3.m----------Replicates the simulations and gives all results for Example 3.
 MainExample3Size2.m ----------Replicates the simulations and gives all results for Example 3, smaller design size.
 Simulator.m----------Gives the HF and LF simulator outputs for Examples 1-3.
 TransformData.m----------Gives the Box-Cox, square root, or identity transformation, and the log absolute value of the Jacobian for the transformation.
 TransformData_inv.m----------Gives the inverse of the Box-Cox, square root, or identity transformation.
 
-Example1Design.mat----------Initial designs for Example 1.
-Example1Results.mat----------Numerical results for Example 1 that give the mat file for final results
+Example1.mat----------Initial designs and numerical results for Example 1.
+Example1Size2.mat ----------Initial designs and numerical results for Example 1, larger design size 
+Example1GridData.mat----------Gives 11^3-point grid and the corresponding LF and HF data for Example 1.
+Example2.mat----------Initial designs and numerical results for Example 2.
+Example2Size2.mat ----------Initial designs and numerical results for Example 2, larger design size 
+Example3.mat----------Initial designs and numerical results for Example 3.
+Example3Size2.mat ----------Initial designs and numerical results for Example 3, smaller design size 
 
-Example1Size2Design.mat----------Initial designs for Example 1, larger design size
-Example1Size2Results.mat----------Numerical results for Example 1, larger design size that give the mat file for final results
-
-Example2Design.mat----------Initial designs for Example 2.
-Example2Results.mat----------Numerical results for Example 2 that give the mat file for final results
-
-Example2Size2Design.mat----------Initial designs for Example 2, larger design size
-Example2Size2Results.mat----------Numerical results for Example 2, larger design size that give the mat file for final results
-
-Example3Design.mat----------Initial designs for Example 3.
-Example3Results.mat----------Numerical results for Example 3 that give the mat file for final results
-
-Example3Size2Design.mat----------Initial designs for Example 3, smaller design size
-Example3Size2Results.mat----------Numerical results for Example 3, smaller design size that give the mat file for final results
-
-
-%%%%%%%%%%%%%%%%%%%%% Step for replicating results for Example 1 %%%%%%%%%%%%%%%%%%%%%
-Step: Run MainExample1.m and MainExample1Size2.m to obtain the results for Example 1
-
-%%%%%%%%%%%%%%%%%%%%% Steps for replicating results for Example 2 %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% Steps for replicating results for Example 1 %%%%%%%%%%%%%%%%%%%%%
 Step 1: Install EnergyPlus 9.4.0 in the folder C:\EnergyPlusV9-4-0
 Step 2: Put all the Matlab codes, the EPBasicFile.idf file, and the EPWeather.epw file in a single folder.
-Step 3: Run MainExample2.m and MainExample2Size2.m
+Step 3: Run MainExample1.m and MainExample2Size1.m
+
+%%%%%%%%%%%%%%%%%%%%% Step for replicating results for Example 2 %%%%%%%%%%%%%%%%%%%%%
+Step: Run MainExample1.m and MainExample1Size2.m to obtain the results for Example 2
 
 %%%%%%%%%%%%%%%%%%%%% Step for replicating results for Example 3 %%%%%%%%%%%%%%%%%%%%%
 Step: Run MainExample3.m and MainExample3Size2.m to obtain the results for Example 3
